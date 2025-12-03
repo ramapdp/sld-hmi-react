@@ -426,9 +426,10 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   // Edge Properties
   if (selectedEdge) {
     const edgeStyle = selectedEdge.style || {};
+    const edgeData = selectedEdge.data || {};
 
     return (
-      <aside className="w-80 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700 p-4 overflow-auto">
+      <aside className="w-80 my-2 border border-gray-200 dark:border-gray-700 p-4 overflow-auto rounded-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">Edge Properties</h2>
           <button
@@ -469,21 +470,76 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             </div>
           </div>
 
-          {/* Stroke Color */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Color</label>
-            <input
-              type="color"
-              value={edgeStyle.stroke || "#ffffff"}
-              onChange={(e) =>
-                onUpdateEdge(selectedEdge.id, {
-                  ...edgeStyle,
-                  stroke: e.target.value,
-                })
-              }
-              className="w-full h-10 border border-gray-300 dark:border-gray-600 rounded"
-            />
-          </div>
+          {/* Electrical Line Status */}
+          {edgeData.isElectrical && (
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Electrical Status
+              </label>
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="electricalStatus"
+                    checked={!edgeData.isActive}
+                    onChange={() => {
+                      const newData = { ...edgeData, isActive: false };
+                      const newStyle = {
+                        ...edgeStyle,
+                        stroke: "#ffffff",
+                        strokeDasharray: "0",
+                      };
+                      onUpdateEdge(selectedEdge.id, {
+                        ...newStyle,
+                        data: newData,
+                        animated: false,
+                      });
+                    }}
+                  />
+                  <span className="text-sm">Off (Putih)</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="electricalStatus"
+                    checked={edgeData.isActive}
+                    onChange={() => {
+                      const newData = { ...edgeData, isActive: true };
+                      const newStyle = {
+                        ...edgeStyle,
+                        stroke: "#10b981",
+                        strokeDasharray: "5,5",
+                      };
+                      onUpdateEdge(selectedEdge.id, {
+                        ...newStyle,
+                        data: newData,
+                        animated: true,
+                      });
+                    }}
+                  />
+                  <span className="text-sm">On (Hijau Animated)</span>
+                </label>
+              </div>
+            </div>
+          )}
+
+          {/* Stroke Color - hanya tampil jika bukan electrical atau sedang aktif */}
+          {(!edgeData.isElectrical || edgeData.isActive) && (
+            <div>
+              <label className="block text-sm font-medium mb-1">Color</label>
+              <input
+                type="color"
+                value={edgeStyle.stroke || "#ffffff"}
+                onChange={(e) =>
+                  onUpdateEdge(selectedEdge.id, {
+                    ...edgeStyle,
+                    stroke: e.target.value,
+                  })
+                }
+                className="w-full h-10 border border-gray-300 dark:border-gray-600 rounded"
+              />
+            </div>
+          )}
 
           {/* Stroke Width */}
           <div>
@@ -501,41 +557,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               }
               className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
             />
-          </div>
-
-          {/* Line Style */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Line Style</label>
-            <select
-              value={edgeStyle.strokeDasharray ? "dashed" : "solid"}
-              onChange={(e) =>
-                onUpdateEdge(selectedEdge.id, {
-                  ...edgeStyle,
-                  strokeDasharray: e.target.value === "dashed" ? "5,5" : "0",
-                })
-              }
-              className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-            >
-              <option value="solid">Solid</option>
-              <option value="dashed">Dashed</option>
-            </select>
-          </div>
-
-          {/* Animated */}
-          <div>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={selectedEdge.animated || false}
-                onChange={(e) =>
-                  onUpdateEdge(selectedEdge.id, {
-                    ...edgeStyle,
-                    animated: e.target.checked,
-                  })
-                }
-              />
-              <span className="text-sm font-medium">Animated</span>
-            </label>
           </div>
 
           {/* Edge Type */}

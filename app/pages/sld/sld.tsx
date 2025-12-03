@@ -6,6 +6,7 @@ import ReactFlow, {
   Background,
   addEdge,
   MarkerType,
+  ConnectionMode,
 } from "reactflow";
 import type { Node, Edge } from "reactflow";
 import "reactflow/dist/style.css";
@@ -13,61 +14,163 @@ import { initialEdges, initialNodes } from "~/components/sld/dummyData";
 import { ComponentSidebar } from "~/components/sld/SidebarComponent";
 import { PropertiesPanel } from "~/components/sld/PropertiesPanel";
 import {
-  BreakerNode,
-  TrafoNode,
-  BusNode,
-  GeneratorNode,
-  LoadNode,
-  CapacitorNode,
-  RelayNode,
-  MeterNode,
+  // Basic shapes
   LineNode,
   CustomSVGNode,
   TextNode,
   RectangleNode,
   CircleNode,
-  DisconnectorNode,
-  LoadSwitchNode,
-  EarthSwitchNode,
-  MotorNode,
-  FuseNode,
-  CurrentTransformerNode,
-  VoltageTransformerNode,
+  // Sites and Substations
+  SubstationOffNode,
+  SubstationNode,
+  // Switches
+  RecloserSwitchClosedNode,
+  RecloserSwitchOpenNode,
+  LbsClosedNode,
+  LbsOpenNode,
+  SwitchClosedNode,
+  SwitchOpenNode,
+  // Transformers
+  TrafoTMNode,
+  TrafoTTNode,
+  Trafo3BelitanNode,
+  TrafoAutoNode,
+  TrafoDayaNode,
+  // Generators
+  Generator1Node,
+  Generator2Node,
+  Generator3Node,
+  Generator4Node,
+  // Sources
+  PembangkitNode,
+  Source2Node,
+  // Shunts
+  Shunt1Node,
+  Shunt2Node,
+  // Power Electronic Devices
+  PowerElectronic1Node,
+  PowerElectronic2Node,
+  PowerElectronic3Node,
+  PowerElectronic4Node,
+  PowerElectronic5Node,
+  PowerElectronic6Node,
+  PowerElectronic7Node,
+  PowerElectronic8Node,
+  PowerElectronic9Node,
+  PowerElectronic10Node,
+  PowerElectronic11Node,
+  PowerElectronic12Node,
+  PowerElectronic13Node,
+  PowerElectronic14Node,
+  PowerElectronic15Node,
+  // Grounding
   GroundNode,
+  // General shapes
+  TriangleNode,
+  SquareNode,
+  HomeNode,
+  // Telemetry
+  TapChangerNode,
+  FrequencyNode,
+  VoltageNode,
+  PowerActiveNode,
+  PowerReactiveNode,
+  CurrentRNode,
+  CurrentSNode,
+  CurrentTNode,
+  CustomTelemetryNode,
+  // Manual Set
+  ManualSet1Node,
+  ManualSet2Node,
 } from "~/components/sld/SLDNodeComponents";
 
 const nodeTypes = {
-  breaker: BreakerNode,
-  trafo: TrafoNode,
-  bus: BusNode,
-  generator: GeneratorNode,
-  load: LoadNode,
-  capacitor: CapacitorNode,
-  relay: RelayNode,
-  meter: MeterNode,
+  // Basic Shapes
   line: LineNode,
   customSVG: CustomSVGNode,
   text: TextNode,
   rectangle: RectangleNode,
   circle: CircleNode,
-  disconnector: DisconnectorNode,
-  loadSwitch: LoadSwitchNode,
-  earthSwitch: EarthSwitchNode,
-  motor: MotorNode,
-  fuse: FuseNode,
-  currentTransformer: CurrentTransformerNode,
-  voltageTransformer: VoltageTransformerNode,
+  
+  // Sites and Substations
+  substationOff: SubstationOffNode,
+  substation: SubstationNode,
+  
+  // Switches
+  RecloserSwitchClosed: RecloserSwitchClosedNode,
+  RecloserSwitchOpen: RecloserSwitchOpenNode,
+  LbsClosed: LbsClosedNode,
+  LbsOpen: LbsOpenNode,
+  switchClosed: SwitchClosedNode,
+  switchOpen: SwitchOpenNode,
+  
+  // Transformers
+  trafoTM: TrafoTMNode,
+  trafoTT: TrafoTTNode,
+  trafo3Belitan: Trafo3BelitanNode,
+  trafoAuto: TrafoAutoNode,
+  trafoDaya: TrafoDayaNode,
+  
+  // Generators
+  generator1: Generator1Node,
+  generator2: Generator2Node,
+  generator3: Generator3Node,
+  generator4: Generator4Node,
+  
+  // Sources
+  pembangkit: PembangkitNode,
+  source2: Source2Node,
+  
+  // Shunts and Filters
+  shunt1: Shunt1Node,
+  shunt2: Shunt2Node,
+  
+  // Power Electronic Devices
+  powerElectronic1: PowerElectronic1Node,
+  powerElectronic2: PowerElectronic2Node,
+  powerElectronic3: PowerElectronic3Node,
+  powerElectronic4: PowerElectronic4Node,
+  powerElectronic5: PowerElectronic5Node,
+  powerElectronic6: PowerElectronic6Node,
+  powerElectronic7: PowerElectronic7Node,
+  powerElectronic8: PowerElectronic8Node,
+  powerElectronic9: PowerElectronic9Node,
+  powerElectronic10: PowerElectronic10Node,
+  powerElectronic11: PowerElectronic11Node,
+  powerElectronic12: PowerElectronic12Node,
+  powerElectronic13: PowerElectronic13Node,
+  powerElectronic14: PowerElectronic14Node,
+  powerElectronic15: PowerElectronic15Node,
+  
+  // Grounding
   ground: GroundNode,
+  
+  // General Components
+  triangle: TriangleNode,
+  square: SquareNode,
+  circleIcon: CircleNode,
+  home: HomeNode,
+  
+  // Telemetry
+  tapChanger: TapChangerNode,
+  frequency: FrequencyNode,
+  voltage: VoltageNode,
+  powerActive: PowerActiveNode,
+  powerReactive: PowerReactiveNode,
+  currentR: CurrentRNode,
+  currentS: CurrentSNode,
+  currentT: CurrentTNode,
+  customTelemetry: CustomTelemetryNode,
+  
+  // Manual Set
+  manualSet1: ManualSet1Node,
+  manualSet2: ManualSet2Node,
 };
 
 const defaultEdgeOptions = {
   type: "smoothstep",
   animated: false,
   style: { stroke: "#ffffff", strokeWidth: 2 },
-  markerEnd: {
-    type: MarkerType.ArrowClosed,
-    color: "#ffffff",
-  },
 };
 
 const SLDPages = () => {
@@ -87,23 +190,24 @@ const SLDPages = () => {
   const [selectedEdge, setSelectedEdge] = useState<Edge | null>(null);
 
   const onConnect = useCallback(
-    (params) => {
+    (params: any) => {
       const newEdge = {
         ...params,
         type: "smoothstep",
-        animated: selectedTool === "electricalLine",
-        style: {
-          stroke: selectedTool === "electricalLine" ? "#10b981" : "#ffffff",
-          strokeWidth: 2,
+        data: {
+          isElectrical: true,
+          isActive: false, // default mati
         },
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          color: selectedTool === "electricalLine" ? "#10b981" : "#ffffff",
+        animated: false,
+        style: {
+          stroke: "#ffffff",
+          strokeWidth: 2,
+          strokeDasharray: "0", // solid untuk mati
         },
       };
       setEdges((eds) => addEdge(newEdge, eds));
     },
-    [setEdges, selectedTool]
+    [setEdges]
   );
 
   // Handle node click
@@ -220,6 +324,10 @@ const SLDPages = () => {
             if (newStyle.animated !== undefined) {
               updatedEdge.animated = newStyle.animated;
             }
+            // Handle data separately
+            if (newStyle.data) {
+              updatedEdge.data = { ...edge.data, ...newStyle.data };
+            }
             return updatedEdge;
           }
           return edge;
@@ -232,7 +340,13 @@ const SLDPages = () => {
             ...prev,
             style: { ...prev.style, ...newStyle },
             type: newStyle.type || prev.type,
-            animated: newStyle.animated !== undefined ? newStyle.animated : prev.animated,
+            animated:
+              newStyle.animated !== undefined
+                ? newStyle.animated
+                : prev.animated,
+            data: newStyle.data
+              ? { ...prev.data, ...newStyle.data }
+              : prev.data,
           };
         }
         return prev;
@@ -475,6 +589,7 @@ const SLDPages = () => {
             snapToGrid={true}
             snapGrid={[10, 10]}
             fitView
+            connectionMode={ConnectionMode.Loose}
           >
             <Controls />
             <Background color="transparent" gap={gridSize} size={1} />
@@ -493,7 +608,7 @@ const SLDPages = () => {
           }}
         />
       </div>
-      
+
       <footer>
         <div className="p-2 border-t border-gray-200 dark:border-gray-700 h-fit flex justify-between items-center">
           <p className="text-xs text-gray-500 dark:text-gray-400">

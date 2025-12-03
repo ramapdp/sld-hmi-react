@@ -13,9 +13,8 @@ import TrafoAuto from "~/assets/icons/transformers/Frame 486.svg";
 import TrafoDaya from "~/assets/icons/transformers/Frame 487.svg";
 import Generator1 from "~/assets/icons/generator-loads/Frame 478.svg";
 import Generator2 from "~/assets/icons/generator-loads/Frame 479.svg";
-import Generator3 from "~/assets/icons/generator-loads/Frame 480.svg";
+import Pembangkit from "~/assets/icons/generator-loads/Frame 480.svg";
 import Generator4 from "~/assets/icons/generator-loads/Frame 481.svg";
-import Source1 from "~/assets/icons/sources/Frame 478.svg";
 import Source2 from "~/assets/icons/sources/Frame 479.svg";
 import Shunt1 from "~/assets/icons/shunts-filters/Frame 479.svg";
 import Shunt2 from "~/assets/icons/shunts-filters/Frame 480.svg";
@@ -34,19 +33,24 @@ import PowerElectronic12 from "~/assets/icons/power-electronic-devices/Frame 486
 import PowerElectronic13 from "~/assets/icons/power-electronic-devices/Frame 487.svg";
 import PowerElectronic14 from "~/assets/icons/power-electronic-devices/Frame 488.svg";
 import PowerElectronic15 from "~/assets/icons/power-electronic-devices/Frame 489.svg";
-import Ground1 from "~/assets/icons/grounding-elements/Frame 478(1).svg";
-import General1 from "~/assets/icons/general/Frame 478.svg";
-import General2 from "~/assets/icons/general/Frame 479.svg";
-import General3 from "~/assets/icons/general/Frame 480.svg";
-import General4 from "~/assets/icons/general/Frame 481.svg";
-import General5 from "~/assets/icons/general/Frame 482.svg";
-import General6 from "~/assets/icons/general/Frame 483.svg";
-import General7 from "~/assets/icons/general/Frame 484.svg";
-import General8 from "~/assets/icons/general/Frame 485.svg";
-import General9 from "~/assets/icons/general/Frame 486.svg";
-import General10 from "~/assets/icons/general/Frame 487.svg";
+import Ground from "~/assets/icons/grounding-elements/Frame 478(1).svg";
+import Line from "~/assets/icons/general/Frame 479.svg";
+import Triangle from "~/assets/icons/general/Frame 480.svg";
+import Square from "~/assets/icons/general/Frame 481.svg";
+import Circle from "~/assets/icons/general/Frame 482.svg";
+import Home from "~/assets/icons/general/Frame 483.svg";
+import Text from "~/assets/icons/general/Frame 484.svg";
 import ManualSet1 from "~/assets/icons/manual-set/Frame 478.svg";
 import ManualSet2 from "~/assets/icons/manual-set/Frame 486.svg";
+import TapChanger from "~/assets/icons/telemetry/draw-tele-01.svg";
+import Frequecy from "~/assets/icons/telemetry/draw-tele-02.svg";
+import Voltage from "~/assets/icons/telemetry/draw-tele-03.svg";
+import PowerActive from "~/assets/icons/telemetry/draw-tele-04.svg";
+import PowerReactive from "~/assets/icons/telemetry/draw-tele-05.svg";
+import CurrentR from "~/assets/icons/telemetry/draw-tele-06.svg";
+import CurrentS from "~/assets/icons/telemetry/draw-tele-07.svg";
+import CurrentT from "~/assets/icons/telemetry/draw-tele-08.svg";
+import CustomTelemetry from "~/assets/icons/telemetry/draw-tele-09.svg";
 
 export const componentsList = [
   {
@@ -180,13 +184,7 @@ export const componentsList = [
       {
         type: "trafoAuto",
         label: "Auto Trafo",
-        icon: (
-          <img
-            src={TrafoAuto}
-            alt="Auto Trafo"
-            className="w-6 h-auto"
-          />
-        ),
+        icon: <img src={TrafoAuto} alt="Auto Trafo" className="w-6 h-auto" />,
         defaultData: {
           label: "Auto Trafo",
           capacity: "250",
@@ -196,13 +194,7 @@ export const componentsList = [
       {
         type: "trafoDaya",
         label: "Trafo Daya",
-        icon: (
-          <img
-            src={TrafoDaya}
-            alt="Trafo Daya"
-            className="w-6 h-auto"
-          />
-        ),
+        icon: <img src={TrafoDaya} alt="Trafo Daya" className="w-6 h-auto" />,
         defaultData: {
           label: "Trafo Daya",
           capacity: "300",
@@ -232,12 +224,10 @@ export const componentsList = [
         defaultData: { label: "Generator 2", power: "150", type: "type2" },
       },
       {
-        type: "generator3",
-        label: "Generator Type 3",
-        icon: (
-          <img src={Generator3} alt="Generator Type 3" className="w-6 h-auto" />
-        ),
-        defaultData: { label: "Generator 3", power: "200", type: "type3" },
+        type: "pembangkit",
+        label: "Pembangkit",
+        icon: <img src={Pembangkit} alt="Pembangkit" className="w-6 h-auto" />,
+        defaultData: { label: "Pembangkit", power: "200", type: "type3" },
       },
       {
         type: "generator4",
@@ -254,10 +244,10 @@ export const componentsList = [
     collapsed: false,
     items: [
       {
-        type: "source1",
-        label: "Source Type 1",
-        icon: <img src={Source1} alt="Source Type 1" className="w-6 h-auto" />,
-        defaultData: { label: "Source 1", voltage: "110", type: "AC" },
+        type: "pembangkit",
+        label: "Pembangkit",
+        icon: <img src={Pembangkit} alt="Pembangkit" className="w-6 h-auto" />,
+        defaultData: { label: "Pembangkit", power: "200", type: "type3" },
       },
       {
         type: "source2",
@@ -492,16 +482,84 @@ export const componentsList = [
     collapsed: false,
     items: [
       {
-        type: "ground1",
-        label: "Grounding Element Type 1",
+        type: "ground",
+        label: "Grounding",
+        icon: <img src={Ground} alt="Grounding" className="w-6 h-auto" />,
+        defaultData: { label: "Ground 1", resistance: "5" },
+      },
+    ],
+  },
+  {
+    category: "Telemetry",
+    collapsed: false,
+    items: [
+      {
+        type: "tapChanger",
+        label: "Tap Changer",
+        icon: <img src={TapChanger} alt="Tap Changer" className="w-5 h-auto" />,
+        defaultData: { label: "Tap Changer" },
+      },
+      {
+        type: "frequency",
+        label: "Frequency",
+        icon: <img src={Frequecy} alt="Frequency" className="w-5 h-auto" />,
+        defaultData: { label: "Frequency" },
+      },
+      {
+        type: "voltage",
+        label: "Voltage",
+        icon: <img src={Voltage} alt="Voltage" className="w-5 h-auto" />,
+        defaultData: { label: "Voltage" },
+      },
+      {
+        type: "powerActive",
+        label: "Power Active",
+        icon: (
+          <img src={PowerActive} alt="Power Active" className="w-5 h-auto" />
+        ),
+        defaultData: { label: "Power Active" },
+      },
+      {
+        type: "powerReactive",
+        label: "Power Reactive",
         icon: (
           <img
-            src={Ground1}
-            alt="Grounding Element Type 1"
-            className="w-6 h-auto"
+            src={PowerReactive}
+            alt="Power Reactive"
+            className="w-5 h-auto"
           />
         ),
-        defaultData: { label: "Ground 1", resistance: "5" },
+        defaultData: { label: "Power Reactive" },
+      },
+      {
+        type: "currentR",
+        label: "Current R",
+        icon: <img src={CurrentR} alt="Current R" className="w-5 h-auto" />,
+        defaultData: { label: "Current R" },
+      },
+      {
+        type: "currentS",
+        label: "Current S",
+        icon: <img src={CurrentS} alt="Current S" className="w-5 h-auto" />,
+        defaultData: { label: "Current S" },
+      },
+      {
+        type: "currentT",
+        label: "Current T",
+        icon: <img src={CurrentT} alt="Current T" className="w-5 h-auto" />,
+        defaultData: { label: "Current T" },
+      },
+      {
+        type: "customTelemetry",
+        label: "Custom Telemetry",
+        icon: (
+          <img
+            src={CustomTelemetry}
+            alt="Custom Telemetry"
+            className="w-5 h-auto"
+          />
+        ),
+        defaultData: { label: "Custom Telemetry" },
       },
     ],
   },
@@ -510,124 +568,40 @@ export const componentsList = [
     collapsed: false,
     items: [
       {
-        type: "general1",
-        label: "General Component Type 1",
-        icon: (
-          <img
-            src={General1}
-            alt="General Component Type 1"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 1" },
+        type: "line",
+        label: "Line",
+        icon: <img src={Line} alt="Line" className="w-6 h-auto" />,
+        defaultData: { label: "Line", length: 100, angle: 0, color: "#ffffff", thickness: 2 },
       },
       {
-        type: "general2",
-        label: "General Component Type 2",
-        icon: (
-          <img
-            src={General2}
-            alt="General Component Type 2"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 2" },
+        type: "triangle",
+        label: "Triangle",
+        icon: <img src={Triangle} alt="Triangle" className="w-6 h-auto" />,
+        defaultData: { label: "Triangle" },
       },
       {
-        type: "general3",
-        label: "General Component Type 3",
-        icon: (
-          <img
-            src={General3}
-            alt="General Component Type 3"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 3" },
+        type: "square",
+        label: "Square",
+        icon: <img src={Square} alt="square" className="w-6 h-auto" />,
+        defaultData: { label: "Square" },
       },
       {
-        type: "general4",
-        label: "General Component Type 4",
-        icon: (
-          <img
-            src={General4}
-            alt="General Component Type 4"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 4" },
+        type: "circleIcon",
+        label: "Circle",
+        icon: <img src={Circle} alt="Circle" className="w-6 h-auto" />,
+        defaultData: { label: "Circle" },
       },
       {
-        type: "general5",
-        label: "General Component Type 5",
-        icon: (
-          <img
-            src={General5}
-            alt="General Component Type 5"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 5" },
+        type: "home",
+        label: "Home",
+        icon: <img src={Home} alt="Home" className="w-6 h-auto" />,
+        defaultData: { label: "Home" },
       },
       {
-        type: "general6",
-        label: "General Component Type 6",
-        icon: (
-          <img
-            src={General6}
-            alt="General Component Type 6"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 6" },
-      },
-      {
-        type: "general7",
-        label: "General Component Type 7",
-        icon: (
-          <img
-            src={General7}
-            alt="General Component Type 7"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 7" },
-      },
-      {
-        type: "general8",
-        label: "General Component Type 8",
-        icon: (
-          <img
-            src={General8}
-            alt="General Component Type 8"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 8" },
-      },
-      {
-        type: "general9",
-        label: "General Component Type 9",
-        icon: (
-          <img
-            src={General9}
-            alt="General Component Type 9"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 9" },
-      },
-      {
-        type: "general10",
-        label: "General Component Type 10",
-        icon: (
-          <img
-            src={General10}
-            alt="General Component Type 10"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "General 10" },
+        type: "text",
+        label: "Text",
+        icon: <img src={Text} alt="Text" className="w-6 h-auto" />,
+        defaultData: { label: "Text", fontSize: 14, color: "#ffffff" },
       },
     ],
   },
