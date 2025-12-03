@@ -32,30 +32,17 @@ export const BreakerNode = memo(({ data }) => {
   return (
     <div
       style={{
-        padding: "10px",
+        padding: "5px",
         borderRadius: 4,
         minWidth: 80,
         textAlign: "center",
-        backgroundColor: "#1f2937",
-        border: `2px solid ${voltageLevelColor}`,
       }}
     >
       <Handle
         type="target"
         position={Position.Top}
-        style={{ background: voltageLevelColor }}
+        style={{ border: `1px solid #fff` }}
       />
-
-      <div
-        style={{
-          fontSize: "10px",
-          fontWeight: "bold",
-          marginBottom: 4,
-          color: voltageLevelColor,
-        }}
-      >
-        {data.label}
-      </div>
 
       <div
         style={{
@@ -67,17 +54,10 @@ export const BreakerNode = memo(({ data }) => {
         }}
       />
 
-      <div style={{ fontSize: "9px", marginTop: 4 }}>
-        {data.voltage || "-"} kV
-      </div>
-      <div style={{ fontSize: "8px", color: voltageLevelColor }}>
-        {data.voltageLevel}
-      </div>
-
       <Handle
         type="source"
         position={Position.Bottom}
-        style={{ background: voltageLevelColor }}
+        style={{ border: `1px solid #fff` }}
       />
     </div>
   );
@@ -90,16 +70,14 @@ export const TrafoNode = memo(({ data }) => {
   return (
     <div
       style={{
-        padding: "10px",
+        padding: "5px",
         borderRadius: 4,
-        backgroundColor: "#1f2937",
-        border: `2px solid ${voltageLevelColor}`,
       }}
     >
       <Handle
         type="target"
         position={Position.Top}
-        style={{ background: voltageLevelColor }}
+        style={{ border: `1px solid #fff` }}
       />
 
       <svg
@@ -126,23 +104,10 @@ export const TrafoNode = memo(({ data }) => {
         />
       </svg>
 
-      <div
-        style={{
-          textAlign: "center",
-          fontSize: "10px",
-          marginTop: 5,
-          color: voltageLevelColor,
-        }}
-      >
-        {data.label}
-      </div>
-      <div style={{ textAlign: "center", fontSize: "8px", color: "#9ca3af" }}>
-        {data.ratio || ""}
-      </div>
       <Handle
         type="source"
         position={Position.Bottom}
-        style={{ background: voltageLevelColor }}
+        style={{ border: `1px solid #fff` }}
       />
     </div>
   );
