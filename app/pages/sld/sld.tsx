@@ -91,11 +91,11 @@ const nodeTypes = {
   text: TextNode,
   rectangle: RectangleNode,
   circle: CircleNode,
-  
+
   // Sites and Substations
   substationOff: SubstationOffNode,
   substation: SubstationNode,
-  
+
   // Switches
   RecloserSwitchClosed: RecloserSwitchClosedNode,
   RecloserSwitchOpen: RecloserSwitchOpenNode,
@@ -103,28 +103,28 @@ const nodeTypes = {
   LbsOpen: LbsOpenNode,
   switchClosed: SwitchClosedNode,
   switchOpen: SwitchOpenNode,
-  
+
   // Transformers
   trafoTM: TrafoTMNode,
   trafoTT: TrafoTTNode,
   trafo3Belitan: Trafo3BelitanNode,
   trafoAuto: TrafoAutoNode,
   trafoDaya: TrafoDayaNode,
-  
+
   // Generators
   generator1: Generator1Node,
   generator2: Generator2Node,
   generator3: Generator3Node,
   generator4: Generator4Node,
-  
+
   // Sources
   pembangkit: PembangkitNode,
   source2: Source2Node,
-  
+
   // Shunts and Filters
   shunt1: Shunt1Node,
   shunt2: Shunt2Node,
-  
+
   // Power Electronic Devices
   powerElectronic1: PowerElectronic1Node,
   powerElectronic2: PowerElectronic2Node,
@@ -141,16 +141,16 @@ const nodeTypes = {
   powerElectronic13: PowerElectronic13Node,
   powerElectronic14: PowerElectronic14Node,
   powerElectronic15: PowerElectronic15Node,
-  
+
   // Grounding
   ground: GroundNode,
-  
+
   // General Components
   triangle: TriangleNode,
   square: SquareNode,
   circleIcon: CircleNode,
   home: HomeNode,
-  
+
   // Telemetry
   tapChanger: TapChangerNode,
   frequency: FrequencyNode,
@@ -161,7 +161,7 @@ const nodeTypes = {
   currentS: CurrentSNode,
   currentT: CurrentTNode,
   customTelemetry: CustomTelemetryNode,
-  
+
   // Manual Set
   manualSet1: ManualSet1Node,
   manualSet2: ManualSet2Node,
@@ -211,16 +211,144 @@ const SLDPages = () => {
   );
 
   // Handle node click
-  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
-    setSelectedNode(node);
-    setSelectedEdge(null);
-  }, []);
+  const onNodeClick = useCallback(
+    (event: React.MouseEvent, node: Node) => {
+      setSelectedNode(node);
+      setSelectedEdge(null);
+
+      // Highlight the selected node
+      setNodes((nds) =>
+        nds.map((n) => ({
+          ...n,
+          style: {
+            ...n.style,
+            outline: n.id === node.id ? "3px solid #3b82f6" : "none",
+            outlineOffset: n.id === node.id ? "2px" : "0px",
+            
+          },
+        }))
+      );
+
+      // Highlight connected edges
+      setEdges((eds) =>
+        eds.map((edge) => {
+          const isConnected =
+            edge.source === node.id || edge.target === node.id;
+          
+          if (isConnected) {
+            // Highlight connected edges
+            return {
+              ...edge,
+              style: {
+                ...edge.style,
+                stroke: "#3b82f6",
+                strokeWidth: 3,
+                strokeDasharray: "0",
+              },
+              animated: true,
+            };
+          } else {
+            // Reset to original state based on isActive
+            if (edge.data?.isActive === true) {
+              return {
+                ...edge,
+                style: {
+                  ...edge.style,
+                  stroke: "#22c55e",
+                  strokeWidth: 3,
+                  strokeDasharray: "5,5",
+                },
+                animated: true,
+              };
+            } else if (edge.data?.isActive === false) {
+              return {
+                ...edge,
+                style: {
+                  ...edge.style,
+                  stroke: "#ffffff",
+                  strokeWidth: 2,
+                  strokeDasharray: "0",
+                },
+                animated: false,
+              };
+            } else {
+              // Default for non-electrical edges
+              return edge;
+            }
+          }
+        })
+      );
+    },
+    [setNodes, setEdges]
+  );
 
   // Handle edge click
-  const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge) => {
-    setSelectedEdge(edge);
-    setSelectedNode(null);
-  }, []);
+  const onEdgeClick = useCallback(
+    (event: React.MouseEvent, edge: Edge) => {
+      setSelectedEdge(edge);
+      setSelectedNode(null);
+
+      // Reset node highlights
+      setNodes((nds) =>
+        nds.map((n) => ({
+          ...n,
+          style: {
+            ...n.style,
+            outline: "none",
+            outlineOffset: "0px",
+          },
+        }))
+      );
+
+      // Highlight the selected edge
+      setEdges((eds) =>
+        eds.map((e) => {
+          if (e.id === edge.id) {
+            // Highlight selected edge
+            return {
+              ...e,
+              style: {
+                ...e.style,
+                stroke: "#3b82f6",
+                strokeWidth: 4,
+                strokeDasharray: "0",
+              },
+              animated: true,
+            };
+          } else {
+            // Reset to original state based on isActive
+            if (e.data?.isActive === true) {
+              return {
+                ...e,
+                style: {
+                  ...e.style,
+                  stroke: "#22c55e",
+                  strokeWidth: 3,
+                  strokeDasharray: "5,5",
+                },
+                animated: true,
+              };
+            } else if (e.data?.isActive === false) {
+              return {
+                ...e,
+                style: {
+                  ...e.style,
+                  stroke: "#ffffff",
+                  strokeWidth: 2,
+                  strokeDasharray: "0",
+                },
+                animated: false,
+              };
+            } else {
+              // Default for non-electrical edges
+              return e;
+            }
+          }
+        })
+      );
+    },
+    [setNodes, setEdges]
+  );
 
   // Handle pane click (deselect)
   const handlePaneClick = useCallback(
@@ -228,6 +356,51 @@ const SLDPages = () => {
       if (!selectedTool) {
         setSelectedNode(null);
         setSelectedEdge(null);
+
+        // Reset node highlights
+        setNodes((nds) =>
+          nds.map((n) => ({
+            ...n,
+            style: {
+              ...n.style,
+              outline: "none",
+              outlineOffset: "0px",
+            },
+          }))
+        );
+
+        // Reset edge highlights
+        setEdges((eds) =>
+          eds.map((edge) => {
+            // Reset to original state based on isActive
+            if (edge.data?.isActive === true) {
+              return {
+                ...edge,
+                style: {
+                  ...edge.style,
+                  stroke: "#22c55e",
+                  strokeWidth: 3,
+                  strokeDasharray: "5,5",
+                },
+                animated: true,
+              };
+            } else if (edge.data?.isActive === false) {
+              return {
+                ...edge,
+                style: {
+                  ...edge.style,
+                  stroke: "#ffffff",
+                  strokeWidth: 2,
+                  strokeDasharray: "0",
+                },
+                animated: false,
+              };
+            } else {
+              // Default for non-electrical edges
+              return edge;
+            }
+          })
+        );
       }
 
       // Original pane click logic for tools
@@ -605,7 +778,54 @@ const SLDPages = () => {
           onClose={() => {
             setSelectedNode(null);
             setSelectedEdge(null);
+
+            // Reset node highlights
+            setNodes((nds) =>
+              nds.map((n) => ({
+                ...n,
+                style: {
+                  ...n.style,
+                  outline: "none",
+                  outlineOffset: "0px",
+                },
+              }))
+            );
+
+            // Reset edge highlights
+            setEdges((eds) =>
+              eds.map((edge) => {
+                // Reset to original state based on isActive
+                if (edge.data?.isActive === true) {
+                  return {
+                    ...edge,
+                    style: {
+                      ...edge.style,
+                      stroke: "#22c55e",
+                      strokeWidth: 3,
+                      strokeDasharray: "5,5",
+                    },
+                    animated: true,
+                  };
+                } else if (edge.data?.isActive === false) {
+                  return {
+                    ...edge,
+                    style: {
+                      ...edge.style,
+                      stroke: "#ffffff",
+                      strokeWidth: 2,
+                      strokeDasharray: "0",
+                    },
+                    animated: false,
+                  };
+                } else {
+                  // Default for non-electrical edges
+                  return edge;
+                }
+              })
+            );
           }}
+          edges={edges}
+          nodes={nodes}
         />
       </div>
 

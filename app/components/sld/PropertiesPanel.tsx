@@ -7,6 +7,8 @@ interface PropertiesPanelProps {
   onUpdateNode: (nodeId: string, newData: any) => void;
   onUpdateEdge: (edgeId: string, newStyle: any) => void;
   onClose: () => void;
+  edges?: Edge[];
+  nodes?: Node[];
 }
 
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
@@ -15,6 +17,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   onUpdateNode,
   onUpdateEdge,
   onClose,
+  edges = [],
+  nodes = [],
 }) => {
   const [activeTab, setActiveTab] = useState<"properties" | "command">(
     "properties"
@@ -397,6 +401,39 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"
                   />
                 </div>
+              </div>
+            </div>
+
+            {/* Connections */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Connections</label>
+              <div className="space-y-2">
+                {edges.filter(edge => edge.source === selectedNode.id || edge.target === selectedNode.id).length === 0 ? (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">No connections</p>
+                ) : (
+                  <div className="space-y-1">
+                    {edges
+                      .filter(edge => edge.source === selectedNode.id || edge.target === selectedNode.id)
+                      .map((edge, index) => {
+                        const isSource = edge.source === selectedNode.id;
+                        const connectedNodeId = isSource ? edge.target : edge.source;
+                        const connectedNode = nodes.find(n => n.id === connectedNodeId);
+                        const direction = isSource ? '→' : '←';
+                        
+                        return (
+                          <div key={edge.id} className="text-xs p-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600">
+                            <div className="flex items-center gap-1">
+                              <span className="font-mono text-blue-600 dark:text-blue-400">{direction}</span>
+                              <span className="font-medium">{connectedNode?.data?.label || connectedNodeId}</span>
+                            </div>
+                            <div className="text-gray-500 dark:text-gray-400 mt-0.5">
+                              {isSource ? 'Output to' : 'Input from'} • ID: {connectedNodeId}
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
               </div>
             </div>
           </div>

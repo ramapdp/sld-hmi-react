@@ -6,7 +6,7 @@ export const initialNodes: Node[] = [
   {
     id: "title",
     type: "text",
-    position: { x: 550, y: 30 },
+    position: { x: 300, y: 30 },
     data: {
       label: "DUAL GENERATOR REDUNDANCY - 20kV DISTRIBUTION NETWORK",
       fontSize: 18,
@@ -77,7 +77,7 @@ export const initialNodes: Node[] = [
   {
     id: "bus-ground",
     type: "ground",
-    position: { x: 750, y: 600 },
+    position: { x: 650, y: 700 },
     data: { label: "Ground", resistance: "5" },
   },
 
@@ -324,7 +324,7 @@ export const initialEdges: Edge[] = [
     source: "main-bus",
     sourceHandle: "right",
     target: "bus-ground",
-    targetHandle: "left",
+    targetHandle: "top",
     type: "smoothstep",
     data: { isElectrical: true, isActive: true },
     animated: false,
