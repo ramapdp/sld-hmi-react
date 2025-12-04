@@ -1,4 +1,4 @@
-import { LuUndo, LuRedo } from "react-icons/lu";
+import { LuUndo, LuRedo, LuRotateCw, LuTrash2 } from "react-icons/lu";
 
 interface ToolbarProps {
   mode: "edit" | "command";
@@ -9,6 +9,10 @@ interface ToolbarProps {
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
+  hasSelectedNode: boolean;
+  onRotate: () => void;
+  hasSelectedElement: boolean;
+  onDelete: () => void;
 }
 
 const Toolbar = ({
@@ -20,6 +24,10 @@ const Toolbar = ({
   onRedo,
   canUndo,
   canRedo,
+  hasSelectedNode,
+  onRotate,
+  hasSelectedElement,
+  onDelete,
 }: ToolbarProps) => {
   const handleToggleMode = () => {
     onModeChange(mode === "edit" ? "command" : "edit");
@@ -84,6 +92,36 @@ const Toolbar = ({
         title="Redo (Ctrl+Y)"
       >
         <LuRedo size={16} />
+      </button>
+
+      {/* Rotate Button */}
+      <button
+        onClick={onRotate}
+        disabled={!hasSelectedNode}
+        className={`p-1 rounded transition-colors ${
+          hasSelectedNode
+            ? "hover:bg-[#044556] cursor-pointer text-white"
+            : "cursor-not-allowed text-gray-500"
+        }`}
+        aria-label="Rotate Node 90° (R)"
+        title="Rotate Node 90° (R)"
+      >
+        <LuRotateCw size={16} />
+      </button>
+
+      {/* Delete Button */}
+      <button
+        onClick={onDelete}
+        disabled={!hasSelectedElement}
+        className={`p-1 rounded transition-colors ${
+          hasSelectedElement
+            ? "hover:bg-red-600 cursor-pointer text-white"
+            : "cursor-not-allowed text-gray-500"
+        }`}
+        aria-label="Delete (Delete/Backspace)"
+        title="Delete (Delete/Backspace)"
+      >
+        <LuTrash2 size={16} />
       </button>
     </div>
   );

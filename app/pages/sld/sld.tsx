@@ -166,7 +166,7 @@ const SLDPages = () => {
     }
   }, [history, setNodes, setEdges]);
 
-  // Keyboard shortcuts for undo/redo
+  // Keyboard shortcuts for undo/redo and rotate
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
@@ -182,12 +182,24 @@ const SLDPages = () => {
       ) {
         event.preventDefault();
         handleRedo();
+      } else if (event.key === "r" || event.key === "R") {
+        // Rotate shortcut
+        if (selectedNode) {
+          event.preventDefault();
+          handleRotateNode();
+        }
+      } else if (event.key === "Delete" || event.key === "Backspace") {
+        // Delete shortcut
+        if (selectedNode || selectedEdge) {
+          event.preventDefault();
+          handleDelete();
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleUndo, handleRedo]);
+  }, [handleUndo, handleRedo, selectedNode, selectedEdge]);
 
   // Save initial state to history
   useEffect(() => {
@@ -286,6 +298,61 @@ const SLDPages = () => {
     [setEdges]
   );
 
+  const handleRotateNode = useCallback(() => {
+    if (!selectedNode) return;
+
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === selectedNode.id) {
+          const currentRotation = node.data.rotation || 0;
+          const newRotation = (currentRotation + 90) % 360;
+          
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              rotation: newRotation,
+            },
+          };
+        }
+        return node;
+      })
+    );
+
+    // Update selectedNode to reflect the new rotation
+    setSelectedNode((prevNode) => {
+      if (!prevNode) return null;
+      const currentRotation = prevNode.data.rotation || 0;
+      const newRotation = (currentRotation + 90) % 360;
+      
+      return {
+        ...prevNode,
+        data: {
+          ...prevNode.data,
+          rotation: newRotation,
+        },
+      };
+    });
+  }, [selectedNode, setNodes]);
+
+  const handleDelete = useCallback(() => {
+    if (selectedNode) {
+      // Delete selected node and its connected edges
+      setNodes((nds) => nds.filter((node) => node.id !== selectedNode.id));
+      setEdges((eds) =>
+        eds.filter(
+          (edge) =>
+            edge.source !== selectedNode.id && edge.target !== selectedNode.id
+        )
+      );
+      setSelectedNode(null);
+    } else if (selectedEdge) {
+      // Delete selected edge
+      setEdges((eds) => eds.filter((edge) => edge.id !== selectedEdge.id));
+      setSelectedEdge(null);
+    }
+  }, [selectedNode, selectedEdge, setNodes, setEdges]);
+
   const handleClosePropertiesPanel = useCallback(
     createClosePropertiesPanelHandler(
       setSelectedNode,
@@ -378,6 +445,21 @@ const SLDPages = () => {
           }
         `
           : ""}
+        {`
+          .react-flow__node {
+            transform-origin: center center;
+          }
+        `}
+        {nodes
+          .filter((node) => node.data.rotation)
+          .map(
+            (node) => `
+          .react-flow__node[data-id="${node.id}"] > div {
+            transform: rotate(${node.data.rotation}deg);
+          }
+        `
+          )
+          .join("")}
       </style>
       <input
         ref={fileInputRef}
@@ -426,6 +508,10 @@ const SLDPages = () => {
             onRedo={handleRedo}
             canUndo={history.currentIndex > 0}
             canRedo={history.currentIndex < history.nodes.length - 1}
+            hasSelectedNode={!!selectedNode}
+            onRotate={handleRotateNode}
+            hasSelectedElement={!!selectedNode || !!selectedEdge}
+            onDelete={handleDelete}
           />
           <div
             className="flex-1 min-w-0"
