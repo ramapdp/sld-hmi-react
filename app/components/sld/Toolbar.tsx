@@ -1,8 +1,14 @@
+import { LuUndo, LuRedo } from "react-icons/lu";
+
 interface ToolbarProps {
   mode: "edit" | "command";
   onModeChange: (mode: "edit" | "command") => void;
   isSidebarOpen: boolean;
   setIsSidebarOpen: (isOpen: boolean) => void;
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 const Toolbar = ({
@@ -10,14 +16,17 @@ const Toolbar = ({
   onModeChange,
   isSidebarOpen,
   setIsSidebarOpen,
+  onUndo,
+  onRedo,
+  canUndo,
+  canRedo,
 }: ToolbarProps) => {
   const handleToggleMode = () => {
     onModeChange(mode === "edit" ? "command" : "edit");
   };
-  console.log("isSidebarOpen:", isSidebarOpen);
 
   return (
-    <div className="m-1 flex items-center space-x-2 bg-[#a3a3a3]/20 rounded-md py-1 px-1.5">
+    <div className="m-1 flex items-center space-x-1.5 bg-[#a3a3a3]/20 rounded-md py-1 px-1.5">
       <button
         onClick={() => setIsSidebarOpen(true)}
         className={`p-1 bg-[#044556] cursor-pointer hover:opacity-80 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${isSidebarOpen ? "hidden" : ""}`}
@@ -45,6 +54,36 @@ const Toolbar = ({
         ) : (
           <span>Switch to Edit Mode</span>
         )}
+      </button>
+
+      {/* Undo Button */}
+      <button
+        onClick={onUndo}
+        disabled={!canUndo}
+        className={`p-1 rounded transition-colors ${
+          canUndo
+            ? "hover:bg-[#044556] cursor-pointer text-white"
+            : "cursor-not-allowed text-gray-500"
+        }`}
+        aria-label="Undo (Ctrl+Z)"
+        title="Undo (Ctrl+Z)"
+      >
+        <LuUndo size={16} />
+      </button>
+
+      {/* Redo Button */}
+      <button
+        onClick={onRedo}
+        disabled={!canRedo}
+        className={`p-1 rounded transition-colors ${
+          canRedo
+            ? " hover:bg-[#044556] cursor-pointer text-white"
+            : "cursor-not-allowed text-gray-500"
+        }`}
+        aria-label="Redo (Ctrl+Y)"
+        title="Redo (Ctrl+Y)"
+      >
+        <LuRedo size={16} />
       </button>
     </div>
   );

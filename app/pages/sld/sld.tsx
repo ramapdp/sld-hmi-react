@@ -1,10 +1,9 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
   Background,
-  addEdge,
   ConnectionMode,
 } from "reactflow";
 import type { Node, Edge } from "reactflow";
@@ -16,6 +15,22 @@ import Footer from "~/components/sld/Footer";
 import Toolbar from "~/components/sld/Toolbar";
 import { nodeTypes } from "~/components/sld/nodeType";
 import { CustomizableEdge } from "~/components/sld/CustomizableEdge";
+import {
+  createNodeClickHandler,
+  createEdgeClickHandler,
+  createPaneClickHandler,
+  createConnectHandler,
+  createUpdateNodeHandler,
+  createUpdateEdgeHandler,
+  createClosePropertiesPanelHandler,
+  createClearCanvasHandler,
+  createExportJSONHandler,
+  createImportJSONHandler,
+  createUploadSVGHandler,
+  createDragStartHandler,
+  createDragOverHandler,
+  createDropHandler,
+} from "~/components/sld/handlers";
 
 const edgeTypes = {
   customizable: CustomizableEdge,
@@ -27,6 +42,10 @@ const defaultEdgeOptions = {
   style: { stroke: "#ffffff", strokeWidth: 2 },
 };
 
+const customNodeTypes = {
+  ...nodeTypes,
+};
+
 const SLDPages = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -35,9 +54,20 @@ const SLDPages = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
-  const [snapToGrid, setSnapToGrid] = useState(true);
-  const [gridSize, setGridSize] = useState(10);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const snapToGrid = true;
+  const gridSize = 1;
+
+  // Undo/Redo History
+  const [history, setHistory] = useState<{
+    nodes: Node[][];
+    edges: Edge[][];
+    currentIndex: number;
+  }>({ nodes: [], edges: [], currentIndex: -1 });
+  // console.log("History State:", history);
+
+  // Track if this is the initial load
+  const isInitialLoad = useRef(true);
 
   // Mode State
   const [mode, setMode] = useState<"edit" | "command">("edit");
@@ -46,345 +76,266 @@ const SLDPages = () => {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<Edge | null>(null);
 
-  const onConnect = useCallback(
-    (params: any) => {
-      const newEdge = {
-        ...params,
-        type: "smoothstep",
-        data: {
-          isElectrical: true,
-          isActive: false, // default mati
-          edgeType: "smoothstep",
-        },
-        animated: false,
-        style: {
-          stroke: "#ffffff",
-          strokeWidth: 2,
-          strokeDasharray: "0", // solid untuk mati
-        },
-      };
-      setEdges((eds) => addEdge(newEdge, eds));
-    },
-    [setEdges]
-  );
+  // Normalize nodes - remove style/highlight data for comparison
+  const normalizeNodes = useCallback((nodes: Node[]) => {
+    return nodes.map((node) => ({
+      id: node.id,
+      type: node.type,
+      position: node.position,
+      data: node.data,
+    }));
+  }, []);
 
-  // Handle node click
-  const onNodeClick = useCallback(
-    (event: React.MouseEvent, node: Node) => {
-      setSelectedNode(node);
-      setSelectedEdge(null);
+  // Normalize edges - remove style/animated data for comparison
+  const normalizeEdges = useCallback((edges: Edge[]) => {
+    return edges.map((edge) => ({
+      id: edge.id,
+      source: edge.source,
+      target: edge.target,
+      sourceHandle: edge.sourceHandle,
+      targetHandle: edge.targetHandle,
+      type: edge.type,
+      data: edge.data,
+    }));
+  }, []);
 
-      // Highlight the selected node
-      setNodes((nds) =>
-        nds.map((n) => ({
-          ...n,
-          style: {
-            ...n.style,
-            outline: n.id === node.id ? "3px solid #3b82f6" : "none",
-            outlineOffset: n.id === node.id ? "2px" : "0px",
-          },
-        }))
-      );
+  // Save state to history
+  const saveToHistory = useCallback(
+    (newNodes: Node[], newEdges: Edge[]) => {
+      setHistory((prev) => {
+        // Normalize data before saving (exclude styles)
+        const normalizedNodes = normalizeNodes(newNodes);
+        const normalizedEdges = normalizeEdges(newEdges);
 
-      // Highlight connected edges
-      setEdges((eds) =>
-        eds.map((edge) => {
-          const isConnected =
-            edge.source === node.id || edge.target === node.id;
-
-          if (isConnected) {
-            // Highlight connected edges
-            return {
-              ...edge,
-              style: {
-                ...edge.style,
-                stroke: "#3b82f6",
-                strokeWidth: 3,
-                strokeDasharray: "0",
-              },
-              animated: true,
-            };
-          } else {
-            // Reset to original state based on isActive
-            if (edge.data?.isActive === true) {
-              return {
-                ...edge,
-                style: {
-                  ...edge.style,
-                  stroke: "#22c55e",
-                  strokeWidth: 3,
-                  strokeDasharray: "5,5",
-                },
-                animated: true,
-              };
-            } else if (edge.data?.isActive === false) {
-              return {
-                ...edge,
-                style: {
-                  ...edge.style,
-                  stroke: "#ffffff",
-                  strokeWidth: 2,
-                  strokeDasharray: "0",
-                },
-                animated: false,
-              };
-            } else {
-              // Default for non-electrical edges
-              return edge;
-            }
-          }
-        })
-      );
-    },
-    [setNodes, setEdges]
-  );
-
-  // Handle edge click
-  const onEdgeClick = useCallback(
-    (event: React.MouseEvent, edge: Edge) => {
-      setSelectedEdge(edge);
-      setSelectedNode(null);
-
-      // Reset node highlights
-      setNodes((nds) =>
-        nds.map((n) => ({
-          ...n,
-          style: {
-            ...n.style,
-            outline: "none",
-            outlineOffset: "0px",
-          },
-        }))
-      );
-
-      // Highlight the selected edge
-      setEdges((eds) =>
-        eds.map((e) => {
-          if (e.id === edge.id) {
-            // Highlight selected edge
-            return {
-              ...e,
-              style: {
-                ...e.style,
-                stroke: "#3b82f6",
-                strokeWidth: 4,
-                strokeDasharray: "0",
-              },
-              animated: true,
-            };
-          } else {
-            // Reset to original state based on isActive
-            if (e.data?.isActive === true) {
-              return {
-                ...e,
-                style: {
-                  ...e.style,
-                  stroke: "#22c55e",
-                  strokeWidth: 3,
-                  strokeDasharray: "5,5",
-                },
-                animated: true,
-              };
-            } else if (e.data?.isActive === false) {
-              return {
-                ...e,
-                style: {
-                  ...e.style,
-                  stroke: "#ffffff",
-                  strokeWidth: 2,
-                  strokeDasharray: "0",
-                },
-                animated: false,
-              };
-            } else {
-              // Default for non-electrical edges
-              return e;
-            }
-          }
-        })
-      );
-    },
-    [setNodes, setEdges]
-  );
-
-  // Handle pane click (deselect)
-  const handlePaneClick = useCallback(
-    (event: React.MouseEvent) => {
-      if (!selectedTool) {
-        setSelectedNode(null);
-        setSelectedEdge(null);
-
-        // Reset node highlights
-        setNodes((nds) =>
-          nds.map((n) => ({
-            ...n,
-            style: {
-              ...n.style,
-              outline: "none",
-              outlineOffset: "0px",
-            },
-          }))
-        );
-
-        // Reset edge highlights
-        setEdges((eds) =>
-          eds.map((edge) => {
-            // Reset to original state based on isActive
-            if (edge.data?.isActive === true) {
-              return {
-                ...edge,
-                style: {
-                  ...edge.style,
-                  stroke: "#22c55e",
-                  strokeWidth: 3,
-                  strokeDasharray: "5,5",
-                },
-                animated: true,
-              };
-            } else if (edge.data?.isActive === false) {
-              return {
-                ...edge,
-                style: {
-                  ...edge.style,
-                  stroke: "#ffffff",
-                  strokeWidth: 2,
-                  strokeDasharray: "0",
-                },
-                animated: false,
-              };
-            } else {
-              // Default for non-electrical edges
-              return edge;
-            }
-          })
-        );
-      }
-
-      // Original pane click logic for tools
-      if (!selectedTool || !reactFlowInstance) return;
-
-      const position = reactFlowInstance.screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
+        const newHistory = {
+          nodes: [
+            ...prev.nodes.slice(0, prev.currentIndex + 1),
+            normalizedNodes as Node[],
+          ],
+          edges: [
+            ...prev.edges.slice(0, prev.currentIndex + 1),
+            normalizedEdges as Edge[],
+          ],
+          currentIndex: prev.currentIndex + 1,
+        };
+        // Limit history to 50 items
+        if (newHistory.nodes.length > 50) {
+          newHistory.nodes = newHistory.nodes.slice(-50);
+          newHistory.edges = newHistory.edges.slice(-50);
+          newHistory.currentIndex = 49;
+        }
+        return newHistory;
       });
-
-      const snappedPosition = snapToGridPosition(position);
-
-      let newNode: Node | null = null;
-
-      switch (selectedTool) {
-        case "text":
-          newNode = {
-            id: `text-${Date.now()}`,
-            type: "text",
-            position: snappedPosition,
-            data: { label: "Text", fontSize: 14, color: "#ffffff" },
-          };
-          break;
-        case "rectangle":
-          newNode = {
-            id: `rect-${Date.now()}`,
-            type: "rectangle",
-            position: snappedPosition,
-            data: {
-              width: 100,
-              height: 60,
-              fill: "#3b82f6",
-              stroke: "#1e40af",
-            },
-          };
-          break;
-        case "circle":
-          newNode = {
-            id: `circle-${Date.now()}`,
-            type: "circle",
-            position: snappedPosition,
-            data: { radius: 30, fill: "#3b82f6", stroke: "#1e40af" },
-          };
-          break;
-        case "line":
-          newNode = {
-            id: `line-${Date.now()}`,
-            type: "line",
-            position: snappedPosition,
-            data: { length: 100, angle: 0, color: "#ffffff", thickness: 2 },
-          };
-          break;
-      }
-
-      if (newNode) {
-        setNodes((nds) => nds.concat(newNode));
-        setSelectedTool(null);
-      }
     },
-    [selectedTool, reactFlowInstance, setNodes, snapToGrid, gridSize]
+    [normalizeNodes, normalizeEdges]
   );
 
-  // Update node data
+  // Undo function
+  const handleUndo = useCallback(() => {
+    if (history.currentIndex > 0) {
+      const newIndex = history.currentIndex - 1;
+      const restoredNodes = history.nodes[newIndex];
+      const restoredEdges = history.edges[newIndex];
+
+      // Restore without triggering style updates
+      setNodes(restoredNodes);
+      setEdges(restoredEdges);
+      setHistory((prev) => ({ ...prev, currentIndex: newIndex }));
+
+      // Clear selections to avoid highlight
+      setSelectedNode(null);
+      setSelectedEdge(null);
+    }
+  }, [history, setNodes, setEdges]);
+
+  // Redo function
+  const handleRedo = useCallback(() => {
+    if (history.currentIndex < history.nodes.length - 1) {
+      const newIndex = history.currentIndex + 1;
+      const restoredNodes = history.nodes[newIndex];
+      const restoredEdges = history.edges[newIndex];
+
+      // Restore without triggering style updates
+      setNodes(restoredNodes);
+      setEdges(restoredEdges);
+      setHistory((prev) => ({ ...prev, currentIndex: newIndex }));
+
+      // Clear selections to avoid highlight
+      setSelectedNode(null);
+      setSelectedEdge(null);
+    }
+  }, [history, setNodes, setEdges]);
+
+  // Keyboard shortcuts for undo/redo
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === "z" &&
+        !event.shiftKey
+      ) {
+        event.preventDefault();
+        handleUndo();
+      } else if (
+        (event.ctrlKey || event.metaKey) &&
+        (event.key === "y" || (event.key === "z" && event.shiftKey))
+      ) {
+        event.preventDefault();
+        handleRedo();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleUndo, handleRedo]);
+
+  // Save initial state to history
+  useEffect(() => {
+    if (isInitialLoad.current && nodes.length > 0) {
+      isInitialLoad.current = false;
+      // Save initial state as first history entry
+      saveToHistory(nodes, edges);
+    }
+  }, [nodes, edges, saveToHistory]);
+
+  // Track changes to nodes and edges
+  useEffect(() => {
+    // Skip if still initial load or no history yet
+    if (isInitialLoad.current || history.currentIndex === -1) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      if (nodes.length >= 0 || edges.length >= 0) {
+        const lastNodes = history.nodes[history.currentIndex];
+        const lastEdges = history.edges[history.currentIndex];
+
+        // Normalize current state (remove styles/highlights)
+        const normalizedCurrentNodes = normalizeNodes(nodes);
+        const normalizedCurrentEdges = normalizeEdges(edges);
+
+        // Only save if there are actual meaningful changes (position, data, connections)
+        // This excludes style/highlight changes
+        const nodesChanged =
+          JSON.stringify(lastNodes) !== JSON.stringify(normalizedCurrentNodes);
+        const edgesChanged =
+          JSON.stringify(lastEdges) !== JSON.stringify(normalizedCurrentEdges);
+
+        if (nodesChanged || edgesChanged) {
+          saveToHistory(nodes, edges);
+        }
+      }
+    }, 500); // Debounce 500ms
+
+    return () => clearTimeout(timeoutId);
+  }, [
+    nodes,
+    edges,
+    history.nodes,
+    history.currentIndex,
+    normalizeNodes,
+    normalizeEdges,
+    saveToHistory,
+  ]);
+
+  // Handlers
+  const onConnect = useCallback(createConnectHandler(setEdges), [setEdges]);
+
+  const onNodeClick = useCallback(
+    createNodeClickHandler(
+      setSelectedNode,
+      setSelectedEdge,
+      setNodes,
+      setEdges
+    ),
+    [setNodes, setEdges]
+  );
+
+  const onEdgeClick = useCallback(
+    createEdgeClickHandler(
+      setSelectedEdge,
+      setSelectedNode,
+      setNodes,
+      setEdges
+    ),
+    [setNodes, setEdges]
+  );
+
+  const handlePaneClick = useCallback(
+    createPaneClickHandler(
+      selectedTool,
+      reactFlowInstance,
+      snapToGrid,
+      gridSize,
+      setSelectedNode,
+      setSelectedEdge,
+      setNodes,
+      setEdges,
+      setSelectedTool
+    ),
+    [selectedTool, reactFlowInstance, snapToGrid, gridSize, setNodes, setEdges]
+  );
+
   const handleUpdateNode = useCallback(
-    (nodeId: string, newData: any) => {
-      setNodes((nds) =>
-        nds.map((node) =>
-          node.id === nodeId ? { ...node, data: newData } : node
-        )
-      );
-      // Update selected node to reflect changes
-      setSelectedNode((prev) =>
-        prev && prev.id === nodeId ? { ...prev, data: newData } : prev
-      );
-    },
+    createUpdateNodeHandler(setNodes, setSelectedNode),
     [setNodes]
   );
 
-  // Update edge style
   const handleUpdateEdge = useCallback(
-    (edgeId: string, newStyle: any) => {
-      setEdges((eds) =>
-        eds.map((edge) => {
-          if (edge.id === edgeId) {
-            const updatedEdge = {
-              ...edge,
-              style: { ...edge.style, ...newStyle },
-            };
-            // Handle type change separately
-            if (newStyle.type) {
-              updatedEdge.type = newStyle.type;
-            }
-            // Handle animated separately
-            if (newStyle.animated !== undefined) {
-              updatedEdge.animated = newStyle.animated;
-            }
-            // Handle data separately
-            if (newStyle.data) {
-              updatedEdge.data = { ...edge.data, ...newStyle.data };
-            }
-            return updatedEdge;
-          }
-          return edge;
-        })
-      );
-      // Update selected edge to reflect changes
-      setSelectedEdge((prev) => {
-        if (prev && prev.id === edgeId) {
-          return {
-            ...prev,
-            style: { ...prev.style, ...newStyle },
-            type: newStyle.type || prev.type,
-            animated:
-              newStyle.animated !== undefined
-                ? newStyle.animated
-                : prev.animated,
-            data: newStyle.data
-              ? { ...prev.data, ...newStyle.data }
-              : prev.data,
-          };
-        }
-        return prev;
-      });
-    },
+    createUpdateEdgeHandler(setEdges, setSelectedEdge),
     [setEdges]
   );
 
+  const handleClosePropertiesPanel = useCallback(
+    createClosePropertiesPanelHandler(
+      setSelectedNode,
+      setSelectedEdge,
+      setNodes,
+      setEdges
+    ),
+    [setNodes, setEdges]
+  );
+
+  const handleClearCanvas = useCallback(
+    createClearCanvasHandler(
+      setNodes,
+      setEdges,
+      setSelectedNode,
+      setSelectedEdge
+    ),
+    [setNodes, setEdges]
+  );
+
+  const handleExportJSON = useCallback(createExportJSONHandler(nodes, edges), [
+    nodes,
+    edges,
+  ]);
+
+  const handleImportJSON = useCallback(
+    createImportJSONHandler(
+      setNodes,
+      setEdges,
+      setSelectedNode,
+      setSelectedEdge
+    ),
+    [setNodes, setEdges]
+  );
+
+  const handleUploadSVG = useCallback(
+    createUploadSVGHandler(setNodes, fileInputRef),
+    [setNodes]
+  );
+
+  const onDragStart = createDragStartHandler();
+
+  const onDragOver = useCallback(createDragOverHandler(), []);
+
+  const onDrop = useCallback(
+    createDropHandler(reactFlowInstance, snapToGrid, gridSize, setNodes),
+    [reactFlowInstance, snapToGrid, gridSize, setNodes]
+  );
+
+  // Sidebar resize handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsResizing(true);
     e.preventDefault();
@@ -415,128 +366,6 @@ const SLDPages = () => {
       document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isResizing, handleMouseMove, handleMouseUp]);
-
-  const onDragStart = (
-    event: React.DragEvent<HTMLDivElement>,
-    nodeType: string,
-    data: any
-  ) => {
-    event.dataTransfer.setData("application/reactflow", nodeType);
-    event.dataTransfer.setData("application/nodedata", JSON.stringify(data));
-    event.dataTransfer.effectAllowed = "move";
-  };
-
-  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-  }, []);
-
-  const snapToGridPosition = (position: { x: number; y: number }) => {
-    if (!snapToGrid) return position;
-    return {
-      x: Math.round(position.x / gridSize) * gridSize,
-      y: Math.round(position.y / gridSize) * gridSize,
-    };
-  };
-
-  const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-
-      const type = event.dataTransfer.getData("application/reactflow");
-      const dataStr = event.dataTransfer.getData("application/nodedata");
-
-      if (typeof type === "undefined" || !type || !reactFlowInstance) {
-        return;
-      }
-
-      const position = reactFlowInstance.screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
-
-      const snappedPosition = snapToGridPosition(position);
-
-      const newNode: Node = {
-        id: `${type}-${Date.now()}`,
-        type,
-        position: snappedPosition,
-        data: JSON.parse(dataStr),
-      };
-
-      setNodes((nds) => nds.concat(newNode));
-    },
-    [reactFlowInstance, setNodes, snapToGrid, gridSize]
-  );
-
-  const handleUploadSVG = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const svgContent = e.target?.result as string;
-        const newNode: Node = {
-          id: `svg-${Date.now()}`,
-          type: "customSVG",
-          position: { x: 100, y: 100 },
-          data: { svgContent, width: 100, height: 100 },
-        };
-        setNodes((nds) => nds.concat(newNode));
-      };
-      reader.readAsText(file);
-
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    },
-    [setNodes]
-  );
-
-  const handleClearCanvas = () => {
-    if (window.confirm("Are you sure you want to clear the canvas?")) {
-      setNodes([]);
-      setEdges([]);
-      setSelectedNode(null);
-      setSelectedEdge(null);
-    }
-  };
-
-  const handleExportJSON = () => {
-    const data = {
-      nodes,
-      edges,
-      timestamp: new Date().toISOString(),
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `sld-diagram-${Date.now()}.json`;
-    link.click();
-  };
-
-  const handleImportJSON = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const data = JSON.parse(e.target?.result as string);
-        setNodes(data.nodes || []);
-        setEdges(data.edges || []);
-        setSelectedNode(null);
-        setSelectedEdge(null);
-      } catch (error) {
-        alert("Invalid JSON file");
-      }
-    };
-    reader.readAsText(file);
-  };
 
   return (
     <div className="flex flex-col h-screen max-h-screen">
@@ -593,6 +422,10 @@ const SLDPages = () => {
             onModeChange={setMode}
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+            canUndo={history.currentIndex > 0}
+            canRedo={history.currentIndex < history.nodes.length - 1}
           />
           <div
             className="flex-1 min-w-0"
@@ -610,12 +443,12 @@ const SLDPages = () => {
               onPaneClick={handlePaneClick}
               onNodeClick={onNodeClick}
               onEdgeClick={onEdgeClick}
-              nodeTypes={nodeTypes}
+              nodeTypes={customNodeTypes}
               edgeTypes={edgeTypes}
               defaultEdgeOptions={defaultEdgeOptions}
               proOptions={{ hideAttribution: true }}
-              snapToGrid={true}
-              snapGrid={[10, 10]}
+              snapToGrid={snapToGrid}
+              snapGrid={[gridSize, gridSize]}
               fitView
               connectionMode={ConnectionMode.Loose}
               nodesDraggable={mode === "edit"}
@@ -624,8 +457,10 @@ const SLDPages = () => {
               edgesFocusable={mode === "edit"}
               elementsSelectable={true}
               connectOnClick={mode === "edit"}
+              minZoom={0.001}
+              maxZoom={1000}
             >
-              <Controls showInteractive={false} />
+              <Controls showInteractive={false} showZoom={false} />
               <Background color="transparent" gap={gridSize} size={1} />
             </ReactFlow>
           </div>
@@ -637,55 +472,7 @@ const SLDPages = () => {
           selectedEdge={selectedEdge}
           onUpdateNode={handleUpdateNode}
           onUpdateEdge={handleUpdateEdge}
-          onClose={() => {
-            setSelectedNode(null);
-            setSelectedEdge(null);
-
-            // Reset node highlights
-            setNodes((nds) =>
-              nds.map((n) => ({
-                ...n,
-                style: {
-                  ...n.style,
-                  outline: "none",
-                  outlineOffset: "0px",
-                },
-              }))
-            );
-
-            // Reset edge highlights
-            setEdges((eds) =>
-              eds.map((edge) => {
-                // Reset to original state based on isActive
-                if (edge.data?.isActive === true) {
-                  return {
-                    ...edge,
-                    style: {
-                      ...edge.style,
-                      stroke: "#22c55e",
-                      strokeWidth: 3,
-                      strokeDasharray: "5,5",
-                    },
-                    animated: true,
-                  };
-                } else if (edge.data?.isActive === false) {
-                  return {
-                    ...edge,
-                    style: {
-                      ...edge.style,
-                      stroke: "#ffffff",
-                      strokeWidth: 2,
-                      strokeDasharray: "0",
-                    },
-                    animated: false,
-                  };
-                } else {
-                  // Default for non-electrical edges
-                  return edge;
-                }
-              })
-            );
-          }}
+          onClose={handleClosePropertiesPanel}
           edges={edges}
           nodes={nodes}
         />

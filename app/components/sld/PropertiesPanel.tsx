@@ -30,24 +30,24 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     const nodeData = selectedNode.data;
 
     return (
-      <aside className="w-80 my-2 border border-gray-200 dark:border-gray-700 p-4 overflow-auto rounded-md">
-        <div className="flex border-b border-gray-200 dark:border-gray-700 mb-4">
+      <aside className="w-80 my-1 border border-[#494949] p-2 overflow-auto rounded-md">
+        <div className="flex gap-1 mb-4">
           <button
             onClick={() => setActiveTab("properties")}
-            className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
+            className={`px-3 py-1 text-[12px] cursor-pointer rounded text-white transition-colors ${
               activeTab === "properties"
-                ? "border-b-2 border-blue-500 text-blue-600 dark:text-blue-400"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                ? "bg-[#044556] text-white"
+                : "bg-transparent hover:bg-[#044556]/50"
             }`}
           >
             Properties
           </button>
           <button
             onClick={() => setActiveTab("command")}
-            className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
+            className={`px-3 py-1 text-[12px] cursor-pointer rounded text-white transition-colors  ${
               activeTab === "command"
-                ? "border-b-2 border-blue-500 text-blue-600 dark:text-blue-400"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                ? "bg-[#044556] text-white"
+                : "bg-transparent hover:bg-[#044556]/50"
             }`}
           >
             Command
@@ -58,7 +58,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           <div className="space-y-4">
             {/* Node Type */}
             <div>
-              <label className="block text-sm font-medium mb-1">Type</label>
+              <label className="block text-sm mb-1">Type</label>
               <input
                 type="text"
                 value={selectedNode.type || "unknown"}
@@ -379,6 +379,51 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               </div>
             )}
 
+            {/* Size (for resizable nodes) */}
+            {nodeData.size !== undefined && (
+              <div>
+                <label className="block text-sm font-medium mb-2">Size</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs mb-1">Width</label>
+                    <input
+                      type="number"
+                      min="30"
+                      value={nodeData.size.width}
+                      onChange={(e) =>
+                        onUpdateNode(selectedNode.id, {
+                          ...nodeData,
+                          size: {
+                            ...nodeData.size,
+                            width: parseFloat(e.target.value),
+                          },
+                        })
+                      }
+                      className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs mb-1">Height</label>
+                    <input
+                      type="number"
+                      min="30"
+                      value={nodeData.size.height}
+                      onChange={(e) =>
+                        onUpdateNode(selectedNode.id, {
+                          ...nodeData,
+                          size: {
+                            ...nodeData.size,
+                            height: parseFloat(e.target.value),
+                          },
+                        })
+                      }
+                      className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Position */}
             <div>
               <label className="block text-sm font-medium mb-2">Position</label>
@@ -406,28 +451,52 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
             {/* Connections */}
             <div>
-              <label className="block text-sm font-medium mb-2">Connections</label>
+              <label className="block text-sm font-medium mb-2">
+                Connections
+              </label>
               <div className="space-y-2">
-                {edges.filter(edge => edge.source === selectedNode.id || edge.target === selectedNode.id).length === 0 ? (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">No connections</p>
+                {edges.filter(
+                  (edge) =>
+                    edge.source === selectedNode.id ||
+                    edge.target === selectedNode.id
+                ).length === 0 ? (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                    No connections
+                  </p>
                 ) : (
                   <div className="space-y-1">
                     {edges
-                      .filter(edge => edge.source === selectedNode.id || edge.target === selectedNode.id)
+                      .filter(
+                        (edge) =>
+                          edge.source === selectedNode.id ||
+                          edge.target === selectedNode.id
+                      )
                       .map((edge, index) => {
                         const isSource = edge.source === selectedNode.id;
-                        const connectedNodeId = isSource ? edge.target : edge.source;
-                        const connectedNode = nodes.find(n => n.id === connectedNodeId);
-                        const direction = isSource ? '→' : '←';
-                        
+                        const connectedNodeId = isSource
+                          ? edge.target
+                          : edge.source;
+                        const connectedNode = nodes.find(
+                          (n) => n.id === connectedNodeId
+                        );
+                        const direction = isSource ? "→" : "←";
+
                         return (
-                          <div key={edge.id} className="text-xs p-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600">
+                          <div
+                            key={edge.id}
+                            className="text-xs p-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600"
+                          >
                             <div className="flex items-center gap-1">
-                              <span className="font-mono text-blue-600 dark:text-blue-400">{direction}</span>
-                              <span className="font-medium">{connectedNode?.data?.label || connectedNodeId}</span>
+                              <span className="font-mono text-blue-600 dark:text-blue-400">
+                                {direction}
+                              </span>
+                              <span className="font-medium">
+                                {connectedNode?.data?.label || connectedNodeId}
+                              </span>
                             </div>
                             <div className="text-gray-500 dark:text-gray-400 mt-0.5">
-                              {isSource ? 'Output to' : 'Input from'} • ID: {connectedNodeId}
+                              {isSource ? "Output to" : "Input from"} • ID:{" "}
+                              {connectedNodeId}
                             </div>
                           </div>
                         );
@@ -466,7 +535,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     const edgeData = selectedEdge.data || {};
 
     return (
-      <aside className="w-80 my-2 border border-gray-200 dark:border-gray-700 p-4 overflow-auto rounded-md">
+      <aside className="w-80 my-1 border border-[#494949] p-4 overflow-auto rounded-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">Edge Properties</h2>
           <button

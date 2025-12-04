@@ -1,21 +1,13 @@
-import SubstationOff from "~/assets/icons/sites-substations/Frame 479.svg";
 import Substation from "~/assets/icons/sites-substations/Frame 480.svg";
-import RecloserSwitchClosed from "~/assets/icons/switches/Frame 478.svg";
-import RecloserSwitchOpen from "~/assets/icons/switches/Frame 479.svg";
-import LbsClosed from "~/assets/icons/switches/Frame 480.svg";
-import LbsOpen from "~/assets/icons/switches/Frame 481.svg";
-import SwitchClosed from "~/assets/icons/switches/Frame 482.svg";
-import SwitchOpen from "~/assets/icons/switches/Frame 483.svg";
-import TrafoTM from "~/assets/icons/transformers/Frame 478.svg";
-import TrafoTT from "~/assets/icons/transformers/Frame 484.svg";
+import RecloserSwitch from "~/assets/icons/switches/Frame 478.svg";
+import Lbs from "~/assets/icons/switches/Frame 480.svg";
+import Switch from "~/assets/icons/switches/Frame 482.svg";
+import Trafo2Belitan from "~/assets/icons/transformers/Frame 478.svg";
 import Trafo3Belitan from "~/assets/icons/transformers/Frame 485.svg";
 import TrafoAuto from "~/assets/icons/transformers/Frame 486.svg";
 import TrafoDaya from "~/assets/icons/transformers/Frame 487.svg";
-import Generator1 from "~/assets/icons/generator-loads/Frame 478.svg";
 import Generator2 from "~/assets/icons/generator-loads/Frame 479.svg";
 import Pembangkit from "~/assets/icons/generator-loads/Frame 480.svg";
-import Generator4 from "~/assets/icons/generator-loads/Frame 481.svg";
-import Source2 from "~/assets/icons/sources/Frame 479.svg";
 import Shunt1 from "~/assets/icons/shunts-filters/Frame 479.svg";
 import Shunt2 from "~/assets/icons/shunts-filters/Frame 480.svg";
 import PowerElectronic1 from "~/assets/icons/power-electronic-devices/Frame 478.svg";
@@ -51,24 +43,13 @@ import CurrentR from "~/assets/icons/telemetry/draw-tele-06.svg";
 import CurrentS from "~/assets/icons/telemetry/draw-tele-07.svg";
 import CurrentT from "~/assets/icons/telemetry/draw-tele-08.svg";
 import CustomTelemetry from "~/assets/icons/telemetry/draw-tele-09.svg";
+import Bus from "~/assets/icons/bus-lines/busbar.svg";
 
 export const componentsList = [
   {
     category: "Sites and Substations",
     collapsed: false,
     items: [
-      {
-        type: "substationOff",
-        label: "Substation Off",
-        icon: (
-          <img
-            src={SubstationOff}
-            alt="Substation Off"
-            className="w-6 h-auto"
-          />
-        ),
-        defaultData: { label: "Substation Off", voltage: "150", type: "type2" },
-      },
       {
         type: "substation",
         label: "Substation",
@@ -82,62 +63,34 @@ export const componentsList = [
     collapsed: false,
     items: [
       {
-        type: "RecloserSwitchClosed",
-        label: "Recloser Switch Closed",
+        type: "RecloserSwitch",
+        label: "Recloser Switch ",
         icon: (
           <img
-            src={RecloserSwitchClosed}
-            alt="Recloser Switch Closed"
+            src={RecloserSwitch}
+            alt="Recloser Switch "
             className="w-6 h-auto"
           />
         ),
         defaultData: {
-          label: "Recloser Switch Closed",
+          label: "Recloser Switch ",
           status: "CLOSE",
           voltage: "20",
         },
       },
       {
-        type: "RecloserSwitchOpen",
-        label: "Recloser Switch Open",
+        type: "Lbs",
+        label: "LBS ",
+        icon: <img src={Lbs} alt="LBS " className="w-6 h-auto" />,
+        defaultData: { label: "LBS ", status: "CLOSE", voltage: "20" },
+      },
+      {
+        type: "switch",
+        label: "Switch ",
         icon: (
-          <img
-            src={RecloserSwitchOpen}
-            alt="Recloser Switch Open"
-            className="w-6 h-auto"
-          />
+          <img src={Switch} alt="Switch " className="w-6 h-auto" />
         ),
-        defaultData: {
-          label: "Recloser Switch Open",
-          status: "OPEN",
-          voltage: "20",
-        },
-      },
-      {
-        type: "LbsClosed",
-        label: "LBS Closed",
-        icon: <img src={LbsClosed} alt="LBS Closed" className="w-6 h-auto" />,
-        defaultData: { label: "LBS Closed", status: "CLOSE", voltage: "20" },
-      },
-      {
-        type: "LbsOpen",
-        label: "LBS Open",
-        icon: <img src={LbsOpen} alt="LBS Open" className="w-6 h-auto" />,
-        defaultData: { label: "LBS Open", status: "OPEN", voltage: "20" },
-      },
-      {
-        type: "switchClosed",
-        label: "Switch Closed",
-        icon: (
-          <img src={SwitchClosed} alt="Switch Closed" className="w-6 h-auto" />
-        ),
-        defaultData: { label: "Switch Closed", status: "CLOSE", voltage: "20" },
-      },
-      {
-        type: "switchOpen",
-        label: "Switch Open",
-        icon: <img src={SwitchOpen} alt="Switch Open" className="w-6 h-auto" />,
-        defaultData: { label: "Switch Open", status: "OPEN", voltage: "20" },
+        defaultData: { label: "Switch ", status: "CLOSE", voltage: "20" },
       },
     ],
   },
@@ -146,23 +99,13 @@ export const componentsList = [
     collapsed: false,
     items: [
       {
-        type: "trafoTM",
-        label: "Trafo TM",
-        icon: <img src={TrafoTM} alt="Trafo TM" className="w-6 h-auto" />,
+        type: "trafo2Belitan",
+        label: "Trafo 2 Belitan",
+        icon: <img src={Trafo2Belitan} alt="Trafo 2 Belitan" className="w-6 h-auto" />,
         defaultData: {
-          label: "Trafo TM",
+          label: "Trafo 2 Belitan",
           capacity: "100",
           voltageLevel: "HV/MV",
-        },
-      },
-      {
-        type: "trafoTT",
-        label: "Trafo TT",
-        icon: <img src={TrafoTT} alt="Trafo TT" className="w-6 h-auto" />,
-        defaultData: {
-          label: "Trafo TT",
-          capacity: "150",
-          voltageLevel: "MV/LV",
         },
       },
       {
@@ -208,12 +151,10 @@ export const componentsList = [
     collapsed: false,
     items: [
       {
-        type: "generator1",
-        label: "Generator Type 1",
-        icon: (
-          <img src={Generator1} alt="Generator Type 1" className="w-6 h-auto" />
-        ),
-        defaultData: { label: "Generator 1", power: "100", type: "type1" },
+        type: "pembangkit",
+        label: "Pembangkit",
+        icon: <img src={Pembangkit} alt="Pembangkit" className="w-6 h-auto" />,
+        defaultData: { label: "Pembangkit", power: "200", type: "type3" },
       },
       {
         type: "generator2",
@@ -222,20 +163,6 @@ export const componentsList = [
           <img src={Generator2} alt="Generator Type 2" className="w-6 h-auto" />
         ),
         defaultData: { label: "Generator 2", power: "150", type: "type2" },
-      },
-      {
-        type: "pembangkit",
-        label: "Pembangkit",
-        icon: <img src={Pembangkit} alt="Pembangkit" className="w-6 h-auto" />,
-        defaultData: { label: "Pembangkit", power: "200", type: "type3" },
-      },
-      {
-        type: "generator4",
-        label: "Generator Type 4",
-        icon: (
-          <img src={Generator4} alt="Generator Type 4" className="w-6 h-auto" />
-        ),
-        defaultData: { label: "Generator 4", power: "250", type: "type4" },
       },
     ],
   },
@@ -249,11 +176,17 @@ export const componentsList = [
         icon: <img src={Pembangkit} alt="Pembangkit" className="w-6 h-auto" />,
         defaultData: { label: "Pembangkit", power: "200", type: "type3" },
       },
+    ],
+  },
+  {
+    category: "Bus and Lines",
+    collapsed: false,
+    items: [
       {
-        type: "source2",
-        label: "Source Type 2",
-        icon: <img src={Source2} alt="Source Type 2" className="w-6 h-auto" />,
-        defaultData: { label: "Source 2", voltage: "220", type: "DC" },
+        type: "bus",
+        label: "Bus",
+        icon: <img src={Bus} alt="Bus" className="w-6 h-auto" />,
+        defaultData: { label: "Bus", power: "200", type: "type3" },
       },
     ],
   },
@@ -571,7 +504,13 @@ export const componentsList = [
         type: "line",
         label: "Line",
         icon: <img src={Line} alt="Line" className="w-6 h-auto" />,
-        defaultData: { label: "Line", length: 100, angle: 0, color: "#ffffff", thickness: 2 },
+        defaultData: {
+          label: "Line",
+          length: 100,
+          angle: 0,
+          color: "#ffffff",
+          thickness: 2,
+        },
       },
       {
         type: "triangle",

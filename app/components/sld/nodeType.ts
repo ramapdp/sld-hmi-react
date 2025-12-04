@@ -1,38 +1,60 @@
+// Basic shapes
 import {
-  // Basic shapes
   LineNode,
   CustomSVGNode,
   TextNode,
   RectangleNode,
   CircleNode,
-  // Sites and Substations
+} from "~/components/sld/node-component/BasicShapes";
+
+// Sites and Substations
+import {
   SubstationOffNode,
   SubstationNode,
-  // Switches
+} from "~/components/sld/node-component/SitesSubstations";
+
+// Switches
+import {
   RecloserSwitchClosedNode,
   RecloserSwitchOpenNode,
   LbsClosedNode,
   LbsOpenNode,
   SwitchClosedNode,
   SwitchOpenNode,
-  // Transformers
+} from "~/components/sld/node-component/Switches";
+
+// Transformers
+import {
   TrafoTMNode,
+  Trafo2BelitanNode,
   TrafoTTNode,
   Trafo3BelitanNode,
   TrafoAutoNode,
   TrafoDayaNode,
-  // Generators
+} from "~/components/sld/node-component/Transformers";
+
+// Generators
+import {
   Generator1Node,
   Generator2Node,
   Generator3Node,
   Generator4Node,
-  // Sources
+} from "~/components/sld/node-component/Generators";
+
+// Sources
+import {
   PembangkitNode,
   Source2Node,
-  // Shunts
+} from "~/components/sld/node-component/Sources";
+
+// Shunts
+import {
   Shunt1Node,
   Shunt2Node,
-  // Power Electronic Devices
+} from "~/components/sld/node-component/Shunts";
+
+// Power Electronic Devices
+import {
   CircuitBreakerNode,
   PowerElectronic2Node,
   PowerElectronic3Node,
@@ -48,13 +70,23 @@ import {
   PowerElectronic13Node,
   PowerElectronic14Node,
   PowerElectronic15Node,
-  // Grounding
-  GroundNode,
-  // General shapes
+} from "~/components/sld/node-component/PowerElectronics";
+
+// Grounding
+import { GroundNode } from "~/components/sld/node-component/Grounding";
+
+// Busbar
+import { BusbarNode } from "~/components/sld/node-component/Busbar";
+
+// General shapes
+import {
   TriangleNode,
   SquareNode,
   HomeNode,
-  // Telemetry
+} from "~/components/sld/node-component/GeneralShapes";
+
+// Telemetry
+import {
   TapChangerNode,
   FrequencyNode,
   VoltageNode,
@@ -64,10 +96,13 @@ import {
   CurrentSNode,
   CurrentTNode,
   CustomTelemetryNode,
-  // Manual Set
+} from "~/components/sld/node-component/Telemetry";
+
+// Manual Set
+import {
   ManualSet1Node,
   ManualSet2Node,
-} from "~/components/sld/SLDNodeComponents";
+} from "~/components/sld/node-component/ManualSet";
 
 export const nodeTypes = {
   // Basic Shapes
@@ -84,13 +119,17 @@ export const nodeTypes = {
   // Switches
   RecloserSwitchClosed: RecloserSwitchClosedNode,
   RecloserSwitchOpen: RecloserSwitchOpenNode,
+  RecloserSwitch: RecloserSwitchClosedNode,
   LbsClosed: LbsClosedNode,
   LbsOpen: LbsOpenNode,
+  Lbs: LbsClosedNode,
   switchClosed: SwitchClosedNode,
   switchOpen: SwitchOpenNode,
+  switch: SwitchClosedNode,
 
   // Transformers
   trafoTM: TrafoTMNode,
+  trafo2Belitan: Trafo2BelitanNode,
   trafoTT: TrafoTTNode,
   trafo3Belitan: Trafo3BelitanNode,
   trafoAuto: TrafoAutoNode,
@@ -131,6 +170,10 @@ export const nodeTypes = {
   // Grounding
   ground: GroundNode,
 
+  // Busbar
+  busbar: BusbarNode,
+  bus: BusbarNode,
+
   // General Components
   triangle: TriangleNode,
   square: SquareNode,
@@ -147,6 +190,7 @@ export const nodeTypes = {
   currentS: CurrentSNode,
   currentT: CurrentTNode,
   customTelemetry: CustomTelemetryNode,
+  telemetry: CustomTelemetryNode,
 
   // Manual Set
   manualSet1: ManualSet1Node,

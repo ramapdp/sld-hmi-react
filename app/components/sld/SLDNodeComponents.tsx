@@ -1,5 +1,5 @@
-import React, { memo, useState } from "react";
-import { Handle, Position, NodeResizer } from "reactflow";
+import { memo, useState } from "react";
+import { Handle, Position, NodeResizer, useReactFlow } from "reactflow";
 
 // Import all SVG icons
 import SubstationOff from "~/assets/icons/sites-substations/Frame 479.svg";
@@ -11,6 +11,7 @@ import LbsOpen from "~/assets/icons/switches/Frame 481.svg";
 import SwitchClosed from "~/assets/icons/switches/Frame 482.svg";
 import SwitchOpen from "~/assets/icons/switches/Frame 483.svg";
 import TrafoTM from "~/assets/icons/transformers/Frame 478.svg";
+import Trafo2Belitan from "~/assets/icons/transformers/Frame 478.svg";
 import TrafoTT from "~/assets/icons/transformers/Frame 484.svg";
 import Trafo3Belitan from "~/assets/icons/transformers/Frame 485.svg";
 import TrafoAuto from "~/assets/icons/transformers/Frame 486.svg";
@@ -53,29 +54,22 @@ import CurrentS from "~/assets/icons/telemetry/draw-tele-07.svg";
 import CurrentT from "~/assets/icons/telemetry/draw-tele-08.svg";
 import CustomTelemetry from "~/assets/icons/telemetry/draw-tele-09.svg";
 
-// Helper function untuk mendapatkan warna berdasarkan voltage level
-const getVoltageLevelColor = (voltageLevel: string) => {
-  switch (voltageLevel) {
-    case "HV":
-      return "#ef4444"; // Red
-    case "MV":
-      return "#eab308"; // Yellow
-    case "LV":
-      return "#22c55e"; // Green
-    case "HV-MV":
-    case "MV-LV":
-      return "#8b5cf6"; // Purple (untuk transformer)
-    default:
-      return "#6b7280"; // Gray
-  }
-};
-
 // Sites and Substations
 export const SubstationOffNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={SubstationOff} alt="Substation Off" style={{ width: 60, height: "auto" }} />
+      <img
+        src={SubstationOff}
+        alt="Substation Off"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -85,9 +79,19 @@ export const SubstationOffNode = memo(({ data }) => {
 
 export const SubstationNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={Substation} alt="Substation" style={{ width: 60, height: "auto" }} />
+      <img
+        src={Substation}
+        alt="Substation"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -98,9 +102,19 @@ export const SubstationNode = memo(({ data }) => {
 // Switches
 export const RecloserSwitchClosedNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={RecloserSwitchClosed} alt="Recloser Switch Closed" style={{ width: 60, height: "auto" }} />
+      <img
+        src={RecloserSwitchClosed}
+        alt="Recloser Switch Closed"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -110,9 +124,19 @@ export const RecloserSwitchClosedNode = memo(({ data }) => {
 
 export const RecloserSwitchOpenNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={RecloserSwitchOpen} alt="Recloser Switch Open" style={{ width: 60, height: "auto" }} />
+      <img
+        src={RecloserSwitchOpen}
+        alt="Recloser Switch Open"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -122,9 +146,19 @@ export const RecloserSwitchOpenNode = memo(({ data }) => {
 
 export const LbsClosedNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={LbsClosed} alt="LBS Closed" style={{ width: 60, height: "auto" }} />
+      <img
+        src={LbsClosed}
+        alt="LBS Closed"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -134,7 +168,13 @@ export const LbsClosedNode = memo(({ data }) => {
 
 export const LbsOpenNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
       <img src={LbsOpen} alt="LBS Open" style={{ width: 60, height: "auto" }} />
       <Handle position={Position.Bottom} id="bottom" />
@@ -146,9 +186,19 @@ export const LbsOpenNode = memo(({ data }) => {
 
 export const SwitchClosedNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={SwitchClosed} alt="Switch Closed" style={{ width: 60, height: "auto" }} />
+      <img
+        src={SwitchClosed}
+        alt="Switch Closed"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -158,9 +208,19 @@ export const SwitchClosedNode = memo(({ data }) => {
 
 export const SwitchOpenNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={SwitchOpen} alt="Switch Open" style={{ width: 60, height: "auto" }} />
+      <img
+        src={SwitchOpen}
+        alt="Switch Open"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -171,7 +231,13 @@ export const SwitchOpenNode = memo(({ data }) => {
 // Transformers
 export const TrafoTMNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
       <img src={TrafoTM} alt="Trafo TM" style={{ width: 60, height: "auto" }} />
       <Handle position={Position.Bottom} id="bottom" />
@@ -181,9 +247,37 @@ export const TrafoTMNode = memo(({ data }) => {
   );
 });
 
+export const Trafo2BelitanNode = memo(({ data }) => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Handle position={Position.Top} id="top" />
+      <img
+        src={Trafo2Belitan}
+        alt="Trafo 2 Belitan"
+        style={{ width: 60, height: "auto" }}
+      />
+      <Handle position={Position.Bottom} id="bottom" />
+      <Handle position={Position.Left} id="left" />
+      <Handle position={Position.Right} id="right" />
+    </div>
+  );
+});
+
 export const TrafoTTNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
       <img src={TrafoTT} alt="Trafo TT" style={{ width: 60, height: "auto" }} />
       <Handle position={Position.Bottom} id="bottom" />
@@ -195,9 +289,19 @@ export const TrafoTTNode = memo(({ data }) => {
 
 export const Trafo3BelitanNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={Trafo3Belitan} alt="Trafo 3 Belitan" style={{ width: 60, height: "auto" }} />
+      <img
+        src={Trafo3Belitan}
+        alt="Trafo 3 Belitan"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -207,9 +311,19 @@ export const Trafo3BelitanNode = memo(({ data }) => {
 
 export const TrafoAutoNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={TrafoAuto} alt="Auto Trafo" style={{ width: 60, height: "auto" }} />
+      <img
+        src={TrafoAuto}
+        alt="Auto Trafo"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -219,9 +333,19 @@ export const TrafoAutoNode = memo(({ data }) => {
 
 export const TrafoDayaNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={TrafoDaya} alt="Trafo Daya" style={{ width: 60, height: "auto" }} />
+      <img
+        src={TrafoDaya}
+        alt="Trafo Daya"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -232,9 +356,19 @@ export const TrafoDayaNode = memo(({ data }) => {
 // Generators
 export const Generator1Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={Generator1} alt="Generator 1" style={{ width: 60, height: "auto" }} />
+      <img
+        src={Generator1}
+        alt="Generator 1"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -244,9 +378,19 @@ export const Generator1Node = memo(({ data }) => {
 
 export const Generator2Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={Generator2} alt="Generator 2" style={{ width: 60, height: "auto" }} />
+      <img
+        src={Generator2}
+        alt="Generator 2"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -254,21 +398,50 @@ export const Generator2Node = memo(({ data }) => {
   );
 });
 
-export const Generator3Node = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const Generator3Node = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={Pembangkit} alt="Pembangkit" style={{ width: size.width, height: size.height }} />
+      <img
+        src={Pembangkit}
+        alt="Pembangkit"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -278,9 +451,19 @@ export const Generator3Node = memo(({ data, selected }) => {
 
 export const Generator4Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={Generator4} alt="Generator 4" style={{ width: 60, height: "auto" }} />
+      <img
+        src={Generator4}
+        alt="Generator 4"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -289,21 +472,50 @@ export const Generator4Node = memo(({ data }) => {
 });
 
 // Sources
-export const PembangkitNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const PembangkitNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={Pembangkit} alt="Pembangkit" style={{ width: size.width, height: size.height }} />
+      <img
+        src={Pembangkit}
+        alt="Pembangkit"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -313,7 +525,13 @@ export const PembangkitNode = memo(({ data, selected }) => {
 
 export const Source2Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
       <img src={Source2} alt="Source 2" style={{ width: 60, height: "auto" }} />
       <Handle position={Position.Bottom} id="bottom" />
@@ -326,7 +544,13 @@ export const Source2Node = memo(({ data }) => {
 // Shunts
 export const Shunt1Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
       <img src={Shunt1} alt="Shunt 1" style={{ width: 60, height: "auto" }} />
       <Handle position={Position.Bottom} id="bottom" />
@@ -338,7 +562,13 @@ export const Shunt1Node = memo(({ data }) => {
 
 export const Shunt2Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
       <img src={Shunt2} alt="Shunt 2" style={{ width: 60, height: "auto" }} />
       <Handle position={Position.Bottom} id="bottom" />
@@ -351,9 +581,19 @@ export const Shunt2Node = memo(({ data }) => {
 // Power Electronic Devices
 export const CircuitBreakerNode = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic1} alt="Circuit Breaker" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic1}
+        alt="Circuit Breaker"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -363,9 +603,19 @@ export const CircuitBreakerNode = memo(({ data }) => {
 
 export const PowerElectronic2Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic2} alt="PED 2" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic2}
+        alt="PED 2"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -375,9 +625,19 @@ export const PowerElectronic2Node = memo(({ data }) => {
 
 export const PowerElectronic3Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic3} alt="PED 3" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic3}
+        alt="PED 3"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -387,9 +647,19 @@ export const PowerElectronic3Node = memo(({ data }) => {
 
 export const PowerElectronic4Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic4} alt="PED 4" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic4}
+        alt="PED 4"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -399,9 +669,19 @@ export const PowerElectronic4Node = memo(({ data }) => {
 
 export const PowerElectronic5Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic5} alt="PED 5" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic5}
+        alt="PED 5"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -411,9 +691,19 @@ export const PowerElectronic5Node = memo(({ data }) => {
 
 export const PowerElectronic6Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic6} alt="PED 6" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic6}
+        alt="PED 6"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -423,9 +713,19 @@ export const PowerElectronic6Node = memo(({ data }) => {
 
 export const PowerElectronic7Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic7} alt="PED 7" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic7}
+        alt="PED 7"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -435,9 +735,19 @@ export const PowerElectronic7Node = memo(({ data }) => {
 
 export const PowerElectronic8Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic8} alt="PED 8" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic8}
+        alt="PED 8"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -447,9 +757,19 @@ export const PowerElectronic8Node = memo(({ data }) => {
 
 export const PowerElectronic9Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic9} alt="PED 9" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic9}
+        alt="PED 9"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -459,9 +779,19 @@ export const PowerElectronic9Node = memo(({ data }) => {
 
 export const PowerElectronic10Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic10} alt="PED 10" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic10}
+        alt="PED 10"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -471,9 +801,19 @@ export const PowerElectronic10Node = memo(({ data }) => {
 
 export const PowerElectronic11Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic11} alt="PED 11" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic11}
+        alt="PED 11"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -483,9 +823,19 @@ export const PowerElectronic11Node = memo(({ data }) => {
 
 export const PowerElectronic12Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic12} alt="PED 12" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic12}
+        alt="PED 12"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -495,9 +845,19 @@ export const PowerElectronic12Node = memo(({ data }) => {
 
 export const PowerElectronic13Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic13} alt="PED 13" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic13}
+        alt="PED 13"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -507,9 +867,19 @@ export const PowerElectronic13Node = memo(({ data }) => {
 
 export const PowerElectronic14Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic14} alt="PED 14" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic14}
+        alt="PED 14"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -519,9 +889,19 @@ export const PowerElectronic14Node = memo(({ data }) => {
 
 export const PowerElectronic15Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic15} alt="PED 15" style={{ width: 60, height: "auto" }} />
+      <img
+        src={PowerElectronic15}
+        alt="PED 15"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -532,7 +912,13 @@ export const PowerElectronic15Node = memo(({ data }) => {
 // Grounding
 export const Ground1Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
       <img src={Ground1} alt="Ground 1" style={{ width: 60, height: "auto" }} />
       <Handle position={Position.Bottom} id="bottom" />
@@ -545,9 +931,19 @@ export const Ground1Node = memo(({ data }) => {
 // General Components
 export const General1Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General1} alt="General 1" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General1}
+        alt="General 1"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -557,9 +953,19 @@ export const General1Node = memo(({ data }) => {
 
 export const General2Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General2} alt="General 2" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General2}
+        alt="General 2"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -569,9 +975,19 @@ export const General2Node = memo(({ data }) => {
 
 export const General3Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General3} alt="General 3" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General3}
+        alt="General 3"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -581,9 +997,19 @@ export const General3Node = memo(({ data }) => {
 
 export const General4Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General4} alt="General 4" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General4}
+        alt="General 4"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -593,9 +1019,19 @@ export const General4Node = memo(({ data }) => {
 
 export const General5Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General5} alt="General 5" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General5}
+        alt="General 5"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -605,9 +1041,19 @@ export const General5Node = memo(({ data }) => {
 
 export const General6Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General6} alt="General 6" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General6}
+        alt="General 6"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -617,9 +1063,19 @@ export const General6Node = memo(({ data }) => {
 
 export const General7Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General7} alt="General 7" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General7}
+        alt="General 7"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -629,9 +1085,19 @@ export const General7Node = memo(({ data }) => {
 
 export const General8Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General8} alt="General 8" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General8}
+        alt="General 8"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -641,9 +1107,19 @@ export const General8Node = memo(({ data }) => {
 
 export const General9Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General9} alt="General 9" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General9}
+        alt="General 9"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -653,9 +1129,19 @@ export const General9Node = memo(({ data }) => {
 
 export const General10Node = memo(({ data }) => {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Handle position={Position.Top} id="top" />
-      <img src={General10} alt="General 10" style={{ width: 60, height: "auto" }} />
+      <img
+        src={General10}
+        alt="General 10"
+        style={{ width: 60, height: "auto" }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -664,21 +1150,50 @@ export const General10Node = memo(({ data }) => {
 });
 
 // Manual Set
-export const ManualSet1Node = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const ManualSet1Node = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={ManualSet1} alt="Manual Set 1" style={{ width: size.width, height: size.height }} />
+      <img
+        src={ManualSet1}
+        alt="Manual Set 1"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -686,21 +1201,50 @@ export const ManualSet1Node = memo(({ data, selected }) => {
   );
 });
 
-export const ManualSet2Node = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const ManualSet2Node = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={ManualSet2} alt="Manual Set 2" style={{ width: size.width, height: size.height }} />
+      <img
+        src={ManualSet2}
+        alt="Manual Set 2"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -709,24 +1253,107 @@ export const ManualSet2Node = memo(({ data, selected }) => {
 });
 
 // Grounding - Update to use new icon name
-export const GroundNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const GroundNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={Ground} alt="Ground" style={{ width: size.width, height: size.height }} />
+      <img
+        src={Ground}
+        alt="Ground"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
+    </div>
+  );
+});
+
+// Busbar Node
+export const BusbarNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 200, height: 20 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {selected && (
+        <NodeResizer
+          minWidth={50}
+          minHeight={10}
+          isVisible={selected}
+          lineClassName="border-blue-500"
+          onResize={handleResize}
+        />
+      )}
+      <Handle position={Position.Top} id="top" />
+      <Handle position={Position.Left} id="left" />
+      <Handle position={Position.Right} id="right" />
+      <Handle position={Position.Bottom} id="bottom" />
+      <div
+        style={{
+          width: size.width,
+          height: size.height,
+          backgroundColor: "#FF0000",
+        }}
+      />
     </div>
   );
 });
@@ -854,21 +1481,50 @@ export const CircleNode = memo(({ data, selected }) => {
   );
 });
 
-export const TriangleNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const TriangleNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={Triangle} alt="Triangle" style={{ width: size.width, height: size.height }} />
+      <img
+        src={Triangle}
+        alt="Triangle"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -876,21 +1532,50 @@ export const TriangleNode = memo(({ data, selected }) => {
   );
 });
 
-export const SquareNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const SquareNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={Square} alt="Square" style={{ width: size.width, height: size.height }} />
+      <img
+        src={Square}
+        alt="Square"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -898,21 +1583,50 @@ export const SquareNode = memo(({ data, selected }) => {
   );
 });
 
-export const HomeNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const HomeNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={Home} alt="Home" style={{ width: size.width, height: size.height }} />
+      <img
+        src={Home}
+        alt="Home"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -920,12 +1634,29 @@ export const HomeNode = memo(({ data, selected }) => {
   );
 });
 
-export const LineNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ 
-    width: data.length || 100, 
-    height: 10 
-  });
-  
+export const LineNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || {
+    width: data.length || 100,
+    height: 10,
+  };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
     <div style={{ position: "relative" }}>
       {selected && (
@@ -934,7 +1665,7 @@ export const LineNode = memo(({ data, selected }) => {
           minHeight={2}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <svg
@@ -957,11 +1688,28 @@ export const LineNode = memo(({ data, selected }) => {
   );
 });
 
-export const CustomSVGNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({
+export const CustomSVGNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || {
     width: data.width || 100,
     height: data.height || 100,
-  });
+  };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
 
   return (
     <div style={{ position: "relative" }}>
@@ -971,14 +1719,7 @@ export const CustomSVGNode = memo(({ data, selected }) => {
           minHeight={50}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => {
-            setSize({
-              width: params.width,
-              height: params.height,
-            });
-            data.width = params.width;
-            data.height = params.height;
-          }}
+          onResize={handleResize}
         />
       )}
       <div
@@ -1017,21 +1758,50 @@ export const CustomSVGNode = memo(({ data, selected }) => {
 });
 
 // Telemetry Components
-export const TapChangerNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const TapChangerNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={TapChanger} alt="Tap Changer" style={{ width: size.width, height: size.height }} />
+      <img
+        src={TapChanger}
+        alt="Tap Changer"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -1039,21 +1809,50 @@ export const TapChangerNode = memo(({ data, selected }) => {
   );
 });
 
-export const FrequencyNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const FrequencyNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={Frequency} alt="Frequency" style={{ width: size.width, height: size.height }} />
+      <img
+        src={Frequency}
+        alt="Frequency"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -1061,21 +1860,50 @@ export const FrequencyNode = memo(({ data, selected }) => {
   );
 });
 
-export const VoltageNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const VoltageNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={Voltage} alt="Voltage" style={{ width: size.width, height: size.height }} />
+      <img
+        src={Voltage}
+        alt="Voltage"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -1083,21 +1911,50 @@ export const VoltageNode = memo(({ data, selected }) => {
   );
 });
 
-export const PowerActiveNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const PowerActiveNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={PowerActive} alt="Power Active" style={{ width: size.width, height: size.height }} />
+      <img
+        src={PowerActive}
+        alt="Power Active"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -1105,21 +1962,50 @@ export const PowerActiveNode = memo(({ data, selected }) => {
   );
 });
 
-export const PowerReactiveNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const PowerReactiveNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={PowerReactive} alt="Power Reactive" style={{ width: size.width, height: size.height }} />
+      <img
+        src={PowerReactive}
+        alt="Power Reactive"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -1127,21 +2013,50 @@ export const PowerReactiveNode = memo(({ data, selected }) => {
   );
 });
 
-export const CurrentRNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const CurrentRNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={CurrentR} alt="Current R" style={{ width: size.width, height: size.height }} />
+      <img
+        src={CurrentR}
+        alt="Current R"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -1149,21 +2064,50 @@ export const CurrentRNode = memo(({ data, selected }) => {
   );
 });
 
-export const CurrentSNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const CurrentSNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={CurrentS} alt="Current S" style={{ width: size.width, height: size.height }} />
+      <img
+        src={CurrentS}
+        alt="Current S"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -1171,21 +2115,50 @@ export const CurrentSNode = memo(({ data, selected }) => {
   );
 });
 
-export const CurrentTNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const CurrentTNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={CurrentT} alt="Current T" style={{ width: size.width, height: size.height }} />
+      <img
+        src={CurrentT}
+        alt="Current T"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
@@ -1193,21 +2166,50 @@ export const CurrentTNode = memo(({ data, selected }) => {
   );
 });
 
-export const CustomTelemetryNode = memo(({ data, selected }) => {
-  const [size, setSize] = React.useState({ width: 60, height: 60 });
+export const CustomTelemetryNode = memo(({ data, selected, id }) => {
+  const { setNodes } = useReactFlow();
+  const size = data.size || { width: 60, height: 60 };
+
+  const handleResize = (e: any, params: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                size: { width: params.width, height: params.height },
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {selected && (
         <NodeResizer
           minWidth={30}
           minHeight={30}
           isVisible={selected}
           lineClassName="border-blue-500"
-          onResize={(e, params) => setSize({ width: params.width, height: params.height })}
+          onResize={handleResize}
         />
       )}
       <Handle position={Position.Top} id="top" />
-      <img src={CustomTelemetry} alt="Custom Telemetry" style={{ width: size.width, height: size.height }} />
+      <img
+        src={CustomTelemetry}
+        alt="Custom Telemetry"
+        style={{ width: size.width, height: size.height }}
+      />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />
