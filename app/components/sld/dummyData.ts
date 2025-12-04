@@ -40,6 +40,12 @@ export const initialNodes: Node[] = [
     position: { x: 250, y: 460 },
     data: { label: "Gen1 Breaker", status: "CLOSE", voltage: "20" },
   },
+  {
+    id: "gen1-cb",
+    type: "RecloserSwitchClosed",
+    position: { x: 400, y: 460 },
+    data: { label: "CB Gen1", status: "CLOSE", voltage: "20" },
+  },
 
   // ========== GENERATOR 2 SYSTEM (RIGHT) ==========
   {
@@ -65,6 +71,12 @@ export const initialNodes: Node[] = [
     type: "RecloserSwitchOpen",
     position: { x: 900, y: 460 },
     data: { label: "Gen2 Breaker", status: "OPEN", voltage: "20" },
+  },
+  {
+    id: "gen2-cb",
+    type: "RecloserSwitchOpen",
+    position: { x: 750, y: 460 },
+    data: { label: "CB Gen2", status: "OPEN", voltage: "20" },
   },
 
   // ========== 20kV MAIN BUS ==========
@@ -196,9 +208,9 @@ export const initialNodes: Node[] = [
   },
   {
     id: "f4-inverter",
-    type: "powerElectronic1",
+    type: "circuitBreaker",
     position: { x: 1020, y: 1060 },
-    data: { label: "Inverter", rating: "1800", type: "Inverter" },
+    data: { label: "CB F4", rating: "1800", type: "CB" },
   },
   {
     id: "f4-load",
@@ -271,10 +283,22 @@ export const initialEdges: Edge[] = [
     id: "e3",
     source: "gen1-breaker",
     sourceHandle: "right",
+    target: "gen1-cb",
+    targetHandle: "left",
+    type: "customizable",
+    data: { isElectrical: true, isActive: true, edgeType: "smoothstep" },
+    animated: true,
+    style: { stroke: "#22c55e", strokeWidth: 3, strokeDasharray: "5,5" },
+  },
+  // Gen1 CB → Main Bus (right to left)
+  {
+    id: "e3a",
+    source: "gen1-cb",
+    sourceHandle: "right",
     target: "main-bus",
     targetHandle: "left",
-    type: "smoothstep",
-    data: { isElectrical: true, isActive: true },
+    type: "customizable",
+    data: { isElectrical: true, isActive: true, edgeType: "smoothstep" },
     animated: true,
     style: { stroke: "#22c55e", strokeWidth: 3, strokeDasharray: "5,5" },
   },
@@ -308,6 +332,18 @@ export const initialEdges: Edge[] = [
   {
     id: "e6",
     source: "gen2-breaker",
+    sourceHandle: "left",
+    target: "gen2-cb",
+    targetHandle: "right",
+    type: "smoothstep",
+    data: { isElectrical: true, isActive: false },
+    animated: false,
+    style: { stroke: "#ffffff", strokeWidth: 2, strokeDasharray: "0" },
+  },
+  // Gen2 CB → Main Bus (left to right)
+  {
+    id: "e6a",
+    source: "gen2-cb",
     sourceHandle: "left",
     target: "main-bus",
     targetHandle: "right",

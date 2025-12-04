@@ -595,27 +595,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
             />
           </div>
-
-          {/* Edge Type */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Type</label>
-            <select
-              value={selectedEdge.type || "smoothstep"}
-              onChange={(e) =>
-                onUpdateEdge(selectedEdge.id, {
-                  ...edgeStyle,
-                  type: e.target.value,
-                })
-              }
-              className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-            >
-              <option value="default">Default</option>
-              <option value="straight">Straight</option>
-              <option value="step">Step</option>
-              <option value="smoothstep">Smooth Step</option>
-              <option value="bezier">Bezier</option>
-            </select>
-          </div>
         </div>
       </aside>
     );

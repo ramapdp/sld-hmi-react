@@ -349,11 +349,11 @@ export const Shunt2Node = memo(({ data }) => {
 });
 
 // Power Electronic Devices
-export const PowerElectronic1Node = memo(({ data }) => {
+export const CircuitBreakerNode = memo(({ data }) => {
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
       <Handle position={Position.Top} id="top" />
-      <img src={PowerElectronic1} alt="PED 1" style={{ width: 60, height: "auto" }} />
+      <img src={PowerElectronic1} alt="Circuit Breaker" style={{ width: 60, height: "auto" }} />
       <Handle position={Position.Bottom} id="bottom" />
       <Handle position={Position.Left} id="left" />
       <Handle position={Position.Right} id="right" />

@@ -5,7 +5,6 @@ import ReactFlow, {
   Controls,
   Background,
   addEdge,
-  MarkerType,
   ConnectionMode,
 } from "reactflow";
 import type { Node, Edge } from "reactflow";
@@ -13,158 +12,13 @@ import "reactflow/dist/style.css";
 import { initialEdges, initialNodes } from "~/components/sld/dummyData";
 import { ComponentSidebar } from "~/components/sld/SidebarComponent";
 import { PropertiesPanel } from "~/components/sld/PropertiesPanel";
-import {
-  // Basic shapes
-  LineNode,
-  CustomSVGNode,
-  TextNode,
-  RectangleNode,
-  CircleNode,
-  // Sites and Substations
-  SubstationOffNode,
-  SubstationNode,
-  // Switches
-  RecloserSwitchClosedNode,
-  RecloserSwitchOpenNode,
-  LbsClosedNode,
-  LbsOpenNode,
-  SwitchClosedNode,
-  SwitchOpenNode,
-  // Transformers
-  TrafoTMNode,
-  TrafoTTNode,
-  Trafo3BelitanNode,
-  TrafoAutoNode,
-  TrafoDayaNode,
-  // Generators
-  Generator1Node,
-  Generator2Node,
-  Generator3Node,
-  Generator4Node,
-  // Sources
-  PembangkitNode,
-  Source2Node,
-  // Shunts
-  Shunt1Node,
-  Shunt2Node,
-  // Power Electronic Devices
-  PowerElectronic1Node,
-  PowerElectronic2Node,
-  PowerElectronic3Node,
-  PowerElectronic4Node,
-  PowerElectronic5Node,
-  PowerElectronic6Node,
-  PowerElectronic7Node,
-  PowerElectronic8Node,
-  PowerElectronic9Node,
-  PowerElectronic10Node,
-  PowerElectronic11Node,
-  PowerElectronic12Node,
-  PowerElectronic13Node,
-  PowerElectronic14Node,
-  PowerElectronic15Node,
-  // Grounding
-  GroundNode,
-  // General shapes
-  TriangleNode,
-  SquareNode,
-  HomeNode,
-  // Telemetry
-  TapChangerNode,
-  FrequencyNode,
-  VoltageNode,
-  PowerActiveNode,
-  PowerReactiveNode,
-  CurrentRNode,
-  CurrentSNode,
-  CurrentTNode,
-  CustomTelemetryNode,
-  // Manual Set
-  ManualSet1Node,
-  ManualSet2Node,
-} from "~/components/sld/SLDNodeComponents";
+import Footer from "~/components/sld/Footer";
+import Toolbar from "~/components/sld/Toolbar";
+import { nodeTypes } from "~/components/sld/nodeType";
+import { CustomizableEdge } from "~/components/sld/CustomizableEdge";
 
-const nodeTypes = {
-  // Basic Shapes
-  line: LineNode,
-  customSVG: CustomSVGNode,
-  text: TextNode,
-  rectangle: RectangleNode,
-  circle: CircleNode,
-
-  // Sites and Substations
-  substationOff: SubstationOffNode,
-  substation: SubstationNode,
-
-  // Switches
-  RecloserSwitchClosed: RecloserSwitchClosedNode,
-  RecloserSwitchOpen: RecloserSwitchOpenNode,
-  LbsClosed: LbsClosedNode,
-  LbsOpen: LbsOpenNode,
-  switchClosed: SwitchClosedNode,
-  switchOpen: SwitchOpenNode,
-
-  // Transformers
-  trafoTM: TrafoTMNode,
-  trafoTT: TrafoTTNode,
-  trafo3Belitan: Trafo3BelitanNode,
-  trafoAuto: TrafoAutoNode,
-  trafoDaya: TrafoDayaNode,
-
-  // Generators
-  generator1: Generator1Node,
-  generator2: Generator2Node,
-  generator3: Generator3Node,
-  generator4: Generator4Node,
-
-  // Sources
-  pembangkit: PembangkitNode,
-  source2: Source2Node,
-
-  // Shunts and Filters
-  shunt1: Shunt1Node,
-  shunt2: Shunt2Node,
-
-  // Power Electronic Devices
-  powerElectronic1: PowerElectronic1Node,
-  powerElectronic2: PowerElectronic2Node,
-  powerElectronic3: PowerElectronic3Node,
-  powerElectronic4: PowerElectronic4Node,
-  powerElectronic5: PowerElectronic5Node,
-  powerElectronic6: PowerElectronic6Node,
-  powerElectronic7: PowerElectronic7Node,
-  powerElectronic8: PowerElectronic8Node,
-  powerElectronic9: PowerElectronic9Node,
-  powerElectronic10: PowerElectronic10Node,
-  powerElectronic11: PowerElectronic11Node,
-  powerElectronic12: PowerElectronic12Node,
-  powerElectronic13: PowerElectronic13Node,
-  powerElectronic14: PowerElectronic14Node,
-  powerElectronic15: PowerElectronic15Node,
-
-  // Grounding
-  ground: GroundNode,
-
-  // General Components
-  triangle: TriangleNode,
-  square: SquareNode,
-  circleIcon: CircleNode,
-  home: HomeNode,
-
-  // Telemetry
-  tapChanger: TapChangerNode,
-  frequency: FrequencyNode,
-  voltage: VoltageNode,
-  powerActive: PowerActiveNode,
-  powerReactive: PowerReactiveNode,
-  currentR: CurrentRNode,
-  currentS: CurrentSNode,
-  currentT: CurrentTNode,
-  customTelemetry: CustomTelemetryNode,
-
-  // Manual Set
-  manualSet1: ManualSet1Node,
-  manualSet2: ManualSet2Node,
+const edgeTypes = {
+  customizable: CustomizableEdge,
 };
 
 const defaultEdgeOptions = {
@@ -185,6 +39,9 @@ const SLDPages = () => {
   const [gridSize, setGridSize] = useState(10);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Mode State
+  const [mode, setMode] = useState<"edit" | "command">("edit");
+
   // Properties Panel State
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<Edge | null>(null);
@@ -197,6 +54,7 @@ const SLDPages = () => {
         data: {
           isElectrical: true,
           isActive: false, // default mati
+          edgeType: "smoothstep",
         },
         animated: false,
         style: {
@@ -224,7 +82,6 @@ const SLDPages = () => {
             ...n.style,
             outline: n.id === node.id ? "3px solid #3b82f6" : "none",
             outlineOffset: n.id === node.id ? "2px" : "0px",
-            
           },
         }))
       );
@@ -234,7 +91,7 @@ const SLDPages = () => {
         eds.map((edge) => {
           const isConnected =
             edge.source === node.id || edge.target === node.id;
-          
+
           if (isConnected) {
             // Highlight connected edges
             return {
@@ -683,6 +540,16 @@ const SLDPages = () => {
 
   return (
     <div className="flex flex-col h-screen max-h-screen">
+      <style>
+        {mode === "command"
+          ? `
+          .react-flow__handle {
+            opacity: 0 !important;
+            pointer-events: none !important;
+          }
+        `
+          : ""}
+      </style>
       <input
         ref={fileInputRef}
         type="file"
@@ -713,60 +580,55 @@ const SLDPages = () => {
               onImport={() => document.getElementById("import-json")?.click()}
             />
             <div
-              className="w-0.5 bg-gray-200 dark:bg-gray-800 cursor-col-resize hover:bg-blue-500 transition-colors"
+              className="w-0.5 bg-gray-200 dark:bg-[#494949] cursor-col-resize hover:bg-blue-500 transition-colors"
               onMouseDown={handleMouseDown}
               style={{ userSelect: "none" }}
             />
           </>
         )}
 
-        {!isSidebarOpen && (
-          <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="absolute left-2 top-2 z-10 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-md hover:bg-gray-100 dark:hover:bg-gray-700"
-            aria-label="Open sidebar"
+        <div className="flex flex-col flex-1 min-w-0">
+          <Toolbar
+            mode={mode}
+            onModeChange={setMode}
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+          <div
+            className="flex-1 min-w-0"
+            style={{ cursor: selectedTool ? "crosshair" : "default" }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={mode === "edit" ? onNodesChange : undefined}
+              onEdgesChange={mode === "edit" ? onEdgesChange : undefined}
+              onConnect={mode === "edit" ? onConnect : undefined}
+              onInit={setReactFlowInstance}
+              onDrop={mode === "edit" ? onDrop : undefined}
+              onDragOver={mode === "edit" ? onDragOver : undefined}
+              onPaneClick={handlePaneClick}
+              onNodeClick={onNodeClick}
+              onEdgeClick={onEdgeClick}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              defaultEdgeOptions={defaultEdgeOptions}
+              proOptions={{ hideAttribution: true }}
+              snapToGrid={true}
+              snapGrid={[10, 10]}
+              fitView
+              connectionMode={ConnectionMode.Loose}
+              nodesDraggable={mode === "edit"}
+              nodesConnectable={mode === "edit"}
+              nodesFocusable={mode === "edit"}
+              edgesFocusable={mode === "edit"}
+              elementsSelectable={true}
+              connectOnClick={mode === "edit"}
             >
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
-        )}
-
-        <div
-          className="flex-1 min-w-0"
-          style={{ cursor: selectedTool ? "crosshair" : "default" }}
-        >
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onInit={setReactFlowInstance}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            onPaneClick={handlePaneClick}
-            onNodeClick={onNodeClick}
-            onEdgeClick={onEdgeClick}
-            nodeTypes={nodeTypes}
-            defaultEdgeOptions={defaultEdgeOptions}
-            proOptions={{ hideAttribution: true }}
-            snapToGrid={true}
-            snapGrid={[10, 10]}
-            fitView
-            connectionMode={ConnectionMode.Loose}
-          >
-            <Controls />
-            <Background color="transparent" gap={gridSize} size={1} />
-          </ReactFlow>
+              <Controls showInteractive={false} />
+              <Background color="transparent" gap={gridSize} size={1} />
+            </ReactFlow>
+          </div>
         </div>
 
         {/* Properties Panel */}
@@ -829,16 +691,7 @@ const SLDPages = () => {
         />
       </div>
 
-      <footer>
-        <div className="p-2 border-t border-gray-200 dark:border-gray-700 h-fit flex justify-between items-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            © 2025 HMI SLD Application
-          </p>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            Nodes: {nodes.length} | Edges: {edges.length}
-          </div>
-        </div>
-      </footer>
+      <Footer nodes={nodes} edges={edges} />
     </div>
   );
 };

@@ -44,11 +44,11 @@ export const ComponentSidebar: React.FC<ComponentSidebarProps> = ({
 
   return (
     <aside
-      className="p-4 overflow-auto bg-white dark:bg-transparent border-r border-[#494949]"
+      className="p-3 overflow-auto bg-white dark:bg-transparent"
       style={{ width: `${sidebarWidth}px`, flexShrink: 0 }}
     >
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-sm font-bold">Drawing Tools</h1>
+        <h1 className="text-[12px] font-bold">Drawing Tools</h1>
         <button
           onClick={onClose}
           className="p-1 hover:bg-gray-200 dark:hover:bg-[#044556] rounded cursor-pointer"
@@ -56,8 +56,8 @@ export const ComponentSidebar: React.FC<ComponentSidebarProps> = ({
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"

@@ -280,16 +280,16 @@ export const componentsList = [
     collapsed: false,
     items: [
       {
-        type: "powerElectronic1",
-        label: "Power Electronic Device Type 1",
+        type: "circuitBreaker",
+        label: "Circuit Breaker (CB)",
         icon: (
           <img
             src={PowerElectronic1}
-            alt="Power Electronic Device Type 1"
+            alt="Circuit Breaker"
             className="w-6 h-auto"
           />
         ),
-        defaultData: { label: "PED 1", rating: "100", type: "Inverter" },
+        defaultData: { label: "Circuit Breaker", rating: "100", type: "CB" },
       },
       {
         type: "powerElectronic2",
