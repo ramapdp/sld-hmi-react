@@ -1,4 +1,11 @@
-import { LuUndo, LuRedo, LuRotateCw, LuTrash2 } from "react-icons/lu";
+import {
+  LuUndo,
+  LuRedo,
+  LuRotateCw,
+  LuTrash2,
+  LuHand,
+  LuMousePointer,
+} from "react-icons/lu";
 
 interface ToolbarProps {
   mode: "edit" | "command";
@@ -13,6 +20,8 @@ interface ToolbarProps {
   onRotate: () => void;
   hasSelectedElement: boolean;
   onDelete: () => void;
+  selectionMode: boolean;
+  onSelectionModeChange: (mode: boolean) => void;
 }
 
 const Toolbar = ({
@@ -28,6 +37,8 @@ const Toolbar = ({
   onRotate,
   hasSelectedElement,
   onDelete,
+  selectionMode,
+  onSelectionModeChange,
 }: ToolbarProps) => {
   const handleToggleMode = () => {
     onModeChange(mode === "edit" ? "command" : "edit");
@@ -93,6 +104,41 @@ const Toolbar = ({
       >
         <LuRedo size={16} />
       </button>
+
+      {/* Selection Mode Toggle */}
+      {/* {mode === "edit" && ( */}
+      {/* <div className="flex items-center space-x-1 bg-[#044556]/30 rounded p-0.5"> */}
+        {/* Select Button */}
+        <button
+          onClick={() => onSelectionModeChange(!selectionMode)}
+          className={`p-1 rounded transition-colors ${
+            mode === "command"
+              ? "cursor-not-allowed text-gray-500"
+              : selectionMode
+                ? "bg-[#044556] text-white cursor-pointer"
+                : "text-white hover:bg-[#044556]/50 cursor-pointer"
+          }`}
+          aria-label="Selection Mode (S)"
+          title="Selection Mode (S)"
+        >
+          <LuMousePointer size={16} />
+        </button>
+
+        {/* Pan Button
+          <button
+            onClick={() => onSelectionModeChange("pan")}
+            className={`p-1 rounded transition-colors ${
+              selectionMode === "pan"
+                ? "bg-[#044556] text-white"
+                : "text-gray-400 hover:text-white"
+            }`}
+            aria-label="Pan Mode (Space)"
+            title="Pan Mode (Space)"
+          >
+            <LuHand size={16} />
+          </button> */}
+      {/* </div> */}
+      {/* )} */}
 
       {/* Rotate Button */}
       <button

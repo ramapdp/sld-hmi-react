@@ -195,4 +195,4 @@ export const nodeTypes = {
   // Manual Set
   manualSet1: ManualSet1Node,
   manualSet2: ManualSet2Node,
-};
+} as const;
