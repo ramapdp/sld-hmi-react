@@ -75,6 +75,7 @@ const SLDPages = () => {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<Edge | null>(null);
   
+  console.log("Selected Node:", selectedNode);
   // Clipboard State for multi-select
   const [clipboard, setClipboard] = useState<{
     nodes: Node[];
@@ -683,9 +684,6 @@ const SLDPages = () => {
       selectedNodes.push(selectedNode);
     }
 
-    console.log("Unlocking nodes:", selectedNodes);
-    console.log("Current nodes state:", nodes.map(n => ({ id: n.id, locked: n.data.locked, draggable: n.draggable })));
-    
     if (selectedNodes.length > 0) {
       const selectedNodeIds = selectedNodes.map((n) => n.id);
       
@@ -985,6 +983,7 @@ const SLDPages = () => {
           onClose={handleClosePropertiesPanel}
           edges={edges}
           nodes={nodes}
+          mode={mode}
         />
       </div>
 

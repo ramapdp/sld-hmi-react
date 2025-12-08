@@ -1,5 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import type { Node, Edge } from "reactflow";
+import { CommonProperties } from "./properties/CommonProperties";
+import { PembangkitProperties } from "./properties/PembangkitProperties";
+import { SwitchProperties } from "./properties/SwitchProperties";
+import { TransformerProperties } from "./properties/TransformerProperties";
+import { LoadProperties } from "./properties/LoadProperties";
+import { ShapeProperties } from "./properties/ShapeProperties";
+import { PembangkitCommands } from "./commands/PembangkitCommands";
+import { SwitchCommands } from "./commands/SwitchCommands";
+import { TransformerCommands } from "./commands/TransformerCommands";
+import { LoadCommands } from "./commands/LoadCommands";
 
 interface PropertiesPanelProps {
   selectedNode: Node | null;
@@ -9,6 +19,7 @@ interface PropertiesPanelProps {
   onClose: () => void;
   edges?: Edge[];
   nodes?: Node[];
+  mode: "edit" | "command";
 }
 
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
@@ -19,19 +30,155 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   onClose,
   edges = [],
   nodes = [],
+  mode,
 }) => {
   const [activeTab, setActiveTab] = useState<"properties" | "command">(
-    "properties"
+    mode === "edit" ? "properties" : "command"
   );
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  useEffect(() => {
+    setIsEditMode(false);
+  }, [selectedNode?.id, selectedEdge?.id]);
+
+  // Update active tab when mode changes
+  useEffect(() => {
+    setActiveTab(mode === "edit" ? "properties" : "command");
+  }, [mode]);
+
   if (!selectedNode && !selectedEdge) return null;
 
   // Node Properties
   if (selectedNode) {
     const nodeData = selectedNode.data;
+    const nodeType = selectedNode.type || "";
+
+    // Memoize node-specific properties rendering untuk avoid re-render
+    const renderSpecificProperties = useMemo(() => {
+      switch (nodeType) {
+        case "pembangkit":
+          return (
+            <PembangkitProperties
+              nodeData={nodeData}
+              nodeId={selectedNode.id}
+              isEditMode={isEditMode}
+              onUpdateNode={onUpdateNode}
+            />
+          );
+
+        case "circuitBreaker":
+        case "switch":
+        case "disconnector":
+          return (
+            <SwitchProperties
+              nodeData={nodeData}
+              nodeId={selectedNode.id}
+              isEditMode={isEditMode}
+              onUpdateNode={onUpdateNode}
+            />
+          );
+
+        case "transformer":
+          return (
+            <TransformerProperties
+              nodeData={nodeData}
+              nodeId={selectedNode.id}
+              isEditMode={isEditMode}
+              onUpdateNode={onUpdateNode}
+            />
+          );
+
+        case "load":
+          return (
+            <LoadProperties
+              nodeData={nodeData}
+              nodeId={selectedNode.id}
+              isEditMode={isEditMode}
+              onUpdateNode={onUpdateNode}
+            />
+          );
+
+        default:
+          // For shapes (text, rectangle, circle) and other nodes
+          if (
+            nodeData.fontSize !== undefined ||
+            nodeData.fill !== undefined ||
+            nodeData.width !== undefined ||
+            nodeData.radius !== undefined
+          ) {
+            return (
+              <ShapeProperties
+                nodeData={nodeData}
+                nodeId={selectedNode.id}
+                isEditMode={isEditMode}
+                onUpdateNode={onUpdateNode}
+              />
+            );
+          }
+          return null;
+      }
+    }, [nodeType, nodeData, selectedNode.id, isEditMode, onUpdateNode]);
+
+    // Memoize node-specific commands rendering
+    const renderSpecificCommands = useMemo(() => {
+      switch (nodeType) {
+        case "pembangkit":
+          return (
+            <PembangkitCommands
+              nodeData={nodeData}
+              nodeId={selectedNode.id}
+              onUpdateNode={onUpdateNode}
+              mode={mode}
+            />
+          );
+
+        case "circuitBreaker":
+        case "switch":
+        case "disconnector":
+          return (
+            <SwitchCommands
+              nodeData={nodeData}
+              nodeId={selectedNode.id}
+              onUpdateNode={onUpdateNode}
+              mode={mode}
+            />
+          );
+
+        case "transformer":
+          return (
+            <TransformerCommands
+              nodeData={nodeData}
+              nodeId={selectedNode.id}
+              onUpdateNode={onUpdateNode}
+              mode={mode}
+            />
+          );
+
+        case "load":
+          return (
+            <LoadCommands
+              nodeData={nodeData}
+              nodeId={selectedNode.id}
+              onUpdateNode={onUpdateNode}
+              mode={mode}
+            />
+          );
+
+        default:
+          return (
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              <p className="text-[12px]">
+                No commands available for this node type
+              </p>
+            </div>
+          );
+      }
+    }, [nodeType, nodeData, selectedNode.id, onUpdateNode, mode]);
 
     return (
-      <aside className="w-80 my-1 border border-[#494949] p-2 overflow-auto rounded-md">
-        <div className="flex gap-1 mb-4">
+      <aside className="flex flex-col w-80 my-1 border border-[#494949] p-2 gap-2 overflow-hidden rounded-md">
+        {/* Tab Navigation */}
+        <div className="flex justify-start gap-1 items-center">
           <button
             onClick={() => setActiveTab("properties")}
             className={`px-3 py-1 text-[12px] cursor-pointer rounded text-white transition-colors ${
@@ -54,475 +201,55 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           </button>
         </div>
 
-        {activeTab === "properties" && (
-          <div className="space-y-4">
-            {/* Node Type */}
-            <div>
-              <label className="block text-sm mb-1">Type</label>
-              <input
-                type="text"
-                value={selectedNode.type || "unknown"}
-                disabled
-                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"
+        {/* Tab Content */}
+        <div className="h-full overflow-auto">
+          {activeTab === "properties" && (
+            <div className="space-y-4">
+              {/* Common Properties for all nodes */}
+              <CommonProperties
+                node={selectedNode}
+                isEditMode={isEditMode}
+                onUpdateNode={onUpdateNode}
+                edges={edges}
+                nodes={nodes}
               />
+
+              {/* Separator */}
+              <div className="border-t border-gray-300 dark:border-gray-600" />
+
+              {/* Node-Specific Properties */}
+              {renderSpecificProperties}
             </div>
+          )}
 
-            {/* Node ID */}
-            <div>
-              <label className="block text-sm font-medium mb-1">ID</label>
-              <input
-                type="text"
-                value={selectedNode.id}
-                disabled
-                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"
-              />
-            </div>
-
-            {/* Label */}
-            {nodeData.label !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-1">Label</label>
-                <input
-                  type="text"
-                  value={nodeData.label}
-                  onChange={(e) =>
-                    onUpdateNode(selectedNode.id, {
-                      ...nodeData,
-                      label: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                />
-              </div>
-            )}
-
-            {/* Status (for switches/breakers) */}
-            {nodeData.status !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-1">Status</label>
-                <select
-                  value={nodeData.status}
-                  onChange={(e) =>
-                    onUpdateNode(selectedNode.id, {
-                      ...nodeData,
-                      status: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                >
-                  <option value="CLOSE">CLOSE</option>
-                  <option value="OPEN">OPEN</option>
-                </select>
-              </div>
-            )}
-
-            {/* Voltage */}
-            {nodeData.voltage !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Voltage (kV)
-                </label>
-                <input
-                  type="text"
-                  value={nodeData.voltage}
-                  onChange={(e) =>
-                    onUpdateNode(selectedNode.id, {
-                      ...nodeData,
-                      voltage: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                />
-              </div>
-            )}
-
-            {/* Voltage Level */}
-            {nodeData.voltageLevel !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Voltage Level
-                </label>
-                <select
-                  value={nodeData.voltageLevel}
-                  onChange={(e) =>
-                    onUpdateNode(selectedNode.id, {
-                      ...nodeData,
-                      voltageLevel: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                >
-                  <option value="HV">HV (High Voltage)</option>
-                  <option value="MV">MV (Medium Voltage)</option>
-                  <option value="LV">LV (Low Voltage)</option>
-                  <option value="HV-MV">HV-MV (Transformer)</option>
-                  <option value="MV-LV">MV-LV (Transformer)</option>
-                </select>
-              </div>
-            )}
-
-            {/* Power */}
-            {nodeData.power !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Power (MW/kW)
-                </label>
-                <input
-                  type="text"
-                  value={nodeData.power}
-                  onChange={(e) =>
-                    onUpdateNode(selectedNode.id, {
-                      ...nodeData,
-                      power: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                />
-              </div>
-            )}
-
-            {/* Ratio (for transformers) */}
-            {nodeData.ratio !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-1">Ratio</label>
-                <input
-                  type="text"
-                  value={nodeData.ratio}
-                  onChange={(e) =>
-                    onUpdateNode(selectedNode.id, {
-                      ...nodeData,
-                      ratio: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                />
-              </div>
-            )}
-
-            {/* Capacity */}
-            {nodeData.capacity !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Capacity (MVA/kVA)
-                </label>
-                <input
-                  type="text"
-                  value={nodeData.capacity}
-                  onChange={(e) =>
-                    onUpdateNode(selectedNode.id, {
-                      ...nodeData,
-                      capacity: e.target.value,
-                    })
-                  }
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                />
-              </div>
-            )}
-
-            {/* Text Properties */}
-            {nodeData.fontSize !== undefined && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Font Size
-                  </label>
-                  <input
-                    type="number"
-                    value={nodeData.fontSize}
-                    onChange={(e) =>
-                      onUpdateNode(selectedNode.id, {
-                        ...nodeData,
-                        fontSize: parseInt(e.target.value),
-                      })
-                    }
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Color
-                  </label>
-                  <input
-                    type="color"
-                    value={nodeData.color}
-                    onChange={(e) =>
-                      onUpdateNode(selectedNode.id, {
-                        ...nodeData,
-                        color: e.target.value,
-                      })
-                    }
-                    className="w-full h-10 border border-gray-300 dark:border-gray-600 rounded"
-                  />
-                </div>
-                <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={nodeData.bold || false}
-                      onChange={(e) =>
-                        onUpdateNode(selectedNode.id, {
-                          ...nodeData,
-                          bold: e.target.checked,
-                        })
-                      }
-                    />
-                    <span className="text-sm">Bold</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={nodeData.italic || false}
-                      onChange={(e) =>
-                        onUpdateNode(selectedNode.id, {
-                          ...nodeData,
-                          italic: e.target.checked,
-                        })
-                      }
-                    />
-                    <span className="text-sm">Italic</span>
-                  </label>
-                </div>
-              </>
-            )}
-
-            {/* Shape Properties (Rectangle/Circle) */}
-            {nodeData.fill !== undefined && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Fill Color
-                  </label>
-                  <input
-                    type="color"
-                    value={nodeData.fill}
-                    onChange={(e) =>
-                      onUpdateNode(selectedNode.id, {
-                        ...nodeData,
-                        fill: e.target.value,
-                      })
-                    }
-                    className="w-full h-10 border border-gray-300 dark:border-gray-600 rounded"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Stroke Color
-                  </label>
-                  <input
-                    type="color"
-                    value={nodeData.stroke}
-                    onChange={(e) =>
-                      onUpdateNode(selectedNode.id, {
-                        ...nodeData,
-                        stroke: e.target.value,
-                      })
-                    }
-                    className="w-full h-10 border border-gray-300 dark:border-gray-600 rounded"
-                  />
-                </div>
-              </>
-            )}
-
-            {/* Rectangle specific */}
-            {nodeData.width !== undefined && nodeData.height !== undefined && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Width
-                  </label>
-                  <input
-                    type="number"
-                    value={nodeData.width}
-                    onChange={(e) =>
-                      onUpdateNode(selectedNode.id, {
-                        ...nodeData,
-                        width: parseInt(e.target.value),
-                      })
-                    }
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Height
-                  </label>
-                  <input
-                    type="number"
-                    value={nodeData.height}
-                    onChange={(e) =>
-                      onUpdateNode(selectedNode.id, {
-                        ...nodeData,
-                        height: parseInt(e.target.value),
-                      })
-                    }
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                  />
-                </div>
-              </>
-            )}
-
-            {/* Circle specific */}
-            {nodeData.radius !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-1">Radius</label>
-                <input
-                  type="number"
-                  value={nodeData.radius}
-                  onChange={(e) =>
-                    onUpdateNode(selectedNode.id, {
-                      ...nodeData,
-                      radius: parseInt(e.target.value),
-                    })
-                  }
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                />
-              </div>
-            )}
-
-            {/* Size (for resizable nodes) */}
-            {nodeData.size !== undefined && (
-              <div>
-                <label className="block text-sm font-medium mb-2">Size</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-xs mb-1">Width</label>
-                    <input
-                      type="number"
-                      min="30"
-                      value={nodeData.size.width}
-                      onChange={(e) =>
-                        onUpdateNode(selectedNode.id, {
-                          ...nodeData,
-                          size: {
-                            ...nodeData.size,
-                            width: parseFloat(e.target.value),
-                          },
-                        })
-                      }
-                      className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs mb-1">Height</label>
-                    <input
-                      type="number"
-                      min="30"
-                      value={nodeData.size.height}
-                      onChange={(e) =>
-                        onUpdateNode(selectedNode.id, {
-                          ...nodeData,
-                          size: {
-                            ...nodeData.size,
-                            height: parseFloat(e.target.value),
-                          },
-                        })
-                      }
-                      className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Position */}
-            <div>
-              <label className="block text-sm font-medium mb-2">Position</label>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-xs mb-1">X</label>
-                  <input
-                    type="number"
-                    value={Math.round(selectedNode.position.x)}
-                    disabled
-                    className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs mb-1">Y</label>
-                  <input
-                    type="number"
-                    value={Math.round(selectedNode.position.y)}
-                    disabled
-                    className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Connections */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Connections
-              </label>
-              <div className="space-y-2">
-                {edges.filter(
-                  (edge) =>
-                    edge.source === selectedNode.id ||
-                    edge.target === selectedNode.id
-                ).length === 0 ? (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                    No connections
-                  </p>
-                ) : (
-                  <div className="space-y-1">
-                    {edges
-                      .filter(
-                        (edge) =>
-                          edge.source === selectedNode.id ||
-                          edge.target === selectedNode.id
-                      )
-                      .map((edge, index) => {
-                        const isSource = edge.source === selectedNode.id;
-                        const connectedNodeId = isSource
-                          ? edge.target
-                          : edge.source;
-                        const connectedNode = nodes.find(
-                          (n) => n.id === connectedNodeId
-                        );
-                        const direction = isSource ? "→" : "←";
-
-                        return (
-                          <div
-                            key={edge.id}
-                            className="text-xs p-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600"
-                          >
-                            <div className="flex items-center gap-1">
-                              <span className="font-mono text-blue-600 dark:text-blue-400">
-                                {direction}
-                              </span>
-                              <span className="font-medium">
-                                {connectedNode?.data?.label || connectedNodeId}
-                              </span>
-                            </div>
-                            <div className="text-gray-500 dark:text-gray-400 mt-0.5">
-                              {isSource ? "Output to" : "Input from"} • ID:{" "}
-                              {connectedNodeId}
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "command" && (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Commands</label>
+          {activeTab === "command" && (
+            <div className="space-y-4">
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                Configure commands for this node
+                Configure SCADA commands for this node
               </p>
 
-              {/* Add your command-related UI here */}
-              <div className="space-y-2">
-                <button className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-left">
-                  Add Command
-                </button>
-              </div>
+              {/* Node-Specific Commands */}
+              {renderSpecificCommands}
+
+              {/* Command Mode Warning */}
+              {mode === "edit" && (
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 bg-yellow-500/10 p-2 rounded border border-yellow-500/30 mt-4">
+                  ⚠️ Switch to command mode to execute
+                </p>
+              )}
             </div>
+          )}
+        </div>
+
+        {/* Edit/Save Button */}
+        {activeTab === "properties" && (
+          <div className="flex justify-start items-center">
+            <button
+              onClick={() => setIsEditMode(!isEditMode)}
+              className={`px-3 py-1 text-[12px] rounded transition-colors bg-[#044556] hover:opacity-70 text-white cursor-pointer`}
+            >
+              {isEditMode ? "Save" : "Edit Node"}
+            </button>
           </div>
         )}
       </aside>
@@ -559,19 +286,21 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         <div className="space-y-4">
           {/* Edge ID */}
           <div>
-            <label className="block text-sm font-medium mb-1">ID</label>
+            <label className="block text-[12px] font-medium mb-1">ID</label>
             <input
               type="text"
               value={selectedEdge.id}
               disabled
-              className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"
+              className="w-full px-3 py-2 text-[12px] border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"
             />
           </div>
 
           {/* Connection */}
           <div>
-            <label className="block text-sm font-medium mb-1">Connection</label>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <label className="block text-[12px] font-medium mb-1">
+              Connection
+            </label>
+            <div className="text-[12px] text-gray-600 dark:text-gray-400">
               {selectedEdge.source} → {selectedEdge.target}
             </div>
           </div>
@@ -579,60 +308,52 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           {/* Electrical Line Status */}
           {edgeData.isElectrical && (
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-[12px] font-medium mb-2">
                 Electrical Status
               </label>
               <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="electricalStatus"
-                    checked={!edgeData.isActive}
-                    onChange={() => {
-                      const newData = { ...edgeData, isActive: false };
-                      const newStyle = {
-                        ...edgeStyle,
-                        stroke: "#ffffff",
-                        strokeDasharray: "0",
-                      };
-                      onUpdateEdge(selectedEdge.id, {
-                        ...newStyle,
-                        data: newData,
-                        animated: false,
-                      });
-                    }}
-                  />
-                  <span className="text-sm">Off (Putih)</span>
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="electricalStatus"
-                    checked={edgeData.isActive}
-                    onChange={() => {
-                      const newData = { ...edgeData, isActive: true };
-                      const newStyle = {
-                        ...edgeStyle,
-                        stroke: "#10b981",
-                        strokeDasharray: "5,5",
-                      };
-                      onUpdateEdge(selectedEdge.id, {
-                        ...newStyle,
-                        data: newData,
-                        animated: true,
-                      });
-                    }}
-                  />
-                  <span className="text-sm">On (Hijau Animated)</span>
-                </label>
+                <button
+                  onClick={() =>
+                    onUpdateEdge(selectedEdge.id, {
+                      ...edgeStyle,
+                      stroke: "#00ff00",
+                      data: { ...edgeData, isActive: true },
+                    })
+                  }
+                  className={`flex-1 px-3 py-2 text-[12px] border rounded ${
+                    edgeData.isActive
+                      ? "border-green-500 bg-green-500/20 text-green-600 dark:text-green-400"
+                      : "border-gray-300 dark:border-gray-600"
+                  }`}
+                >
+                  Active
+                </button>
+                <button
+                  onClick={() =>
+                    onUpdateEdge(selectedEdge.id, {
+                      ...edgeStyle,
+                      stroke: "#808080",
+                      data: { ...edgeData, isActive: false },
+                    })
+                  }
+                  className={`flex-1 px-3 py-2 text-[12px] border rounded ${
+                    !edgeData.isActive
+                      ? "border-gray-500 bg-gray-500/20 text-gray-600 dark:text-gray-400"
+                      : "border-gray-300 dark:border-gray-600"
+                  }`}
+                >
+                  Inactive
+                </button>
               </div>
             </div>
           )}
 
-          {/* Stroke Color - hanya tampil jika bukan electrical atau sedang aktif */}
+          {/* Stroke Color */}
           {(!edgeData.isElectrical || edgeData.isActive) && (
             <div>
-              <label className="block text-sm font-medium mb-1">Color</label>
+              <label className="block text-[12px] font-medium mb-1">
+                Color
+              </label>
               <input
                 type="color"
                 value={edgeStyle.stroke || "#ffffff"}
@@ -649,7 +370,9 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
           {/* Stroke Width */}
           <div>
-            <label className="block text-sm font-medium mb-1">Width (px)</label>
+            <label className="block text-[12px] font-medium mb-1">
+              Width (px)
+            </label>
             <input
               type="number"
               min="1"
@@ -661,7 +384,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   strokeWidth: parseInt(e.target.value),
                 })
               }
-              className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
+              className="w-full px-3 py-2 text-[12px] border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800"
             />
           </div>
         </div>
