@@ -14,10 +14,6 @@ export const initialNodes: Node[] = [
       fontSize: 28,
       color: "#ffffff",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "text-1764848391100",
@@ -29,10 +25,6 @@ export const initialNodes: Node[] = [
       label: "PLTMG 2",
       fontSize: 28,
       color: "#ffffff",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   {
@@ -46,9 +38,91 @@ export const initialNodes: Node[] = [
       fontSize: 24,
       color: "#ffffff",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
+  },
+  
+  // ========== FEEDER LABELS ==========
+  {
+    id: "text-feeder-1",
+    type: "text",
+    position: { x: 50, y: 700 },
+    width: 120,
+    height: 40,
+    data: {
+      label: "Penyulang 1",
+      fontSize: 18,
+      color: "#22c55e",
+    },
+  },
+  {
+    id: "text-feeder-2",
+    type: "text",
+    position: { x: 363, y: 700 },
+    width: 120,
+    height: 40,
+    data: {
+      label: "Penyulang 2",
+      fontSize: 18,
+      color: "#22c55e",
+    },
+  },
+  {
+    id: "text-feeder-3",
+    type: "text",
+    position: { x: 1561, y: 700 },
+    width: 120,
+    height: 40,
+    data: {
+      label: "Penyulang 3",
+      fontSize: 18,
+      color: "#22c55e",
+    },
+  },
+  {
+    id: "text-feeder-4",
+    type: "text",
+    position: { x: 1874, y: 700 },
+    width: 120,
+    height: 40,
+    data: {
+      label: "Penyulang 4",
+      fontSize: 18,
+      color: "#22c55e",
+    },
+  },
+  {
+    id: "text-feeder-5",
+    type: "text",
+    position: { x: 2607, y: 900 },
+    width: 120,
+    height: 40,
+    data: {
+      label: "Penyulang 5",
+      fontSize: 18,
+      color: "#22c55e",
+    },
+  },
+  {
+    id: "text-feeder-6",
+    type: "text",
+    position: { x: 2962, y: 900 },
+    width: 120,
+    height: 40,
+    data: {
+      label: "Penyulang 6",
+      fontSize: 18,
+      color: "#22c55e",
+    },
+  },
+  {
+    id: "text-feeder-7",
+    type: "text",
+    position: { x: 3368, y: 900 },
+    width: 120,
+    height: 40,
+    data: {
+      label: "Penyulang 7",
+      fontSize: 18,
+      color: "#22c55e",
     },
   },
 
@@ -67,10 +141,6 @@ export const initialNodes: Node[] = [
       type: "type3",
       status: "active",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764846131597",
@@ -83,10 +153,6 @@ export const initialNodes: Node[] = [
       status: "INVALID",
       voltage: "20",
       current: "100",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   {
@@ -102,10 +168,6 @@ export const initialNodes: Node[] = [
       ratio: "20/0.4",
       status: "active",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764847022302",
@@ -118,10 +180,6 @@ export const initialNodes: Node[] = [
       status: "CLOSE",
       voltage: "0.4",
       current: "150",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   // Pembangkit 2
@@ -138,10 +196,6 @@ export const initialNodes: Node[] = [
       type: "type3",
       status: "active",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764846391332",
@@ -154,10 +208,7 @@ export const initialNodes: Node[] = [
       status: "OPEN",
       voltage: "20",
       current: "100",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
+      rotation: 0,
     },
   },
   {
@@ -173,10 +224,6 @@ export const initialNodes: Node[] = [
       ratio: "20/0.4",
       status: "active",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764846482778",
@@ -190,10 +237,6 @@ export const initialNodes: Node[] = [
       voltage: "0.4",
       current: "150",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   // Main Bus PLTMG 1
   {
@@ -205,10 +248,6 @@ export const initialNodes: Node[] = [
     data: {
       label: "Bus PLTMG 1",
       voltage: "0.4",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   // Feeders PLTMG 1
@@ -224,27 +263,6 @@ export const initialNodes: Node[] = [
       voltage: "0.4",
       current: "75",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
-  },
-  {
-    id: "generator2-1764847404247",
-    type: "generator2",
-    position: { x: 128, y: 817 },
-    width: 60,
-    height: 63,
-    data: {
-      label: "Load 1",
-      power: "150",
-      voltage: "0.4",
-      status: "active",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764847328667",
@@ -257,27 +275,6 @@ export const initialNodes: Node[] = [
       status: "CLOSE",
       voltage: "0.4",
       current: "75",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
-  },
-  {
-    id: "generator2-1764847425738",
-    type: "generator2",
-    position: { x: 441, y: 817 },
-    width: 60,
-    height: 63,
-    data: {
-      label: "Load 2",
-      power: "150",
-      voltage: "0.4",
-      status: "active",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   // Kopel
@@ -292,10 +289,6 @@ export const initialNodes: Node[] = [
       status: "CLOSE",
       voltage: "0.4",
       current: "0",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
 
@@ -313,10 +306,6 @@ export const initialNodes: Node[] = [
       voltage: "0.4",
       current: "0",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   // Main Bus PLTMG 2
   {
@@ -328,10 +317,6 @@ export const initialNodes: Node[] = [
     data: {
       label: "Bus PLTMG 2",
       voltage: "0.4",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   // Pembangkit 1
@@ -348,10 +333,6 @@ export const initialNodes: Node[] = [
       type: "type3",
       status: "active",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764848034912",
@@ -364,10 +345,6 @@ export const initialNodes: Node[] = [
       status: "OPEN",
       voltage: "20",
       current: "100",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   {
@@ -383,10 +360,6 @@ export const initialNodes: Node[] = [
       ratio: "20/0.4",
       status: "active",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764847967439",
@@ -399,10 +372,6 @@ export const initialNodes: Node[] = [
       status: "CLOSE",
       voltage: "0.4",
       current: "150",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   // Pembangkit 2
@@ -419,10 +388,6 @@ export const initialNodes: Node[] = [
       type: "type3",
       status: "active",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764848198007",
@@ -435,10 +400,6 @@ export const initialNodes: Node[] = [
       status: "CLOSE",
       voltage: "20",
       current: "100",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   {
@@ -454,10 +415,6 @@ export const initialNodes: Node[] = [
       ratio: "20/0.4",
       status: "active",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764848008464",
@@ -470,10 +427,6 @@ export const initialNodes: Node[] = [
       status: "CLOSE",
       voltage: "0.4",
       current: "150",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
     },
   },
   // Feeders PLTMG 2
@@ -489,27 +442,6 @@ export const initialNodes: Node[] = [
       voltage: "0.4",
       current: "75",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
-  },
-  {
-    id: "generator2-1764847876940",
-    type: "generator2",
-    position: { x: 1639, y: 817 },
-    width: 60,
-    height: 63,
-    data: {
-      label: "Load 3",
-      power: "150",
-      voltage: "0.4",
-      status: "active",
-    },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
-    },
   },
   {
     id: "circuitBreaker-1764847840934",
@@ -523,32 +455,314 @@ export const initialNodes: Node[] = [
       voltage: "0.4",
       current: "75",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
+  },
+
+  // ========== EXTENDED BUS SYSTEM ==========
+  {
+    id: "bus-1765271582062-0",
+    type: "bus",
+    position: { x: 2538, y: 491 },
+    width: 2332,
+    height: 10,
+    data: {
+      label: "Bus PLTMG 2",
+      voltage: "0.4",
     },
   },
   {
-    id: "generator2-1764847922147",
+    id: "circuitBreaker-1765271715177-0",
+    type: "circuitBreaker",
+    position: { x: 2685, y: 585 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "0.4",
+      current: "75",
+    },
+  },
+  {
+    id: "circuitBreaker-1765271715177-1",
+    type: "circuitBreaker",
+    position: { x: 3040, y: 585 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "0.4",
+      current: "75",
+    },
+  },
+  {
+    id: "circuitBreaker-1765271747890-0",
+    type: "circuitBreaker",
+    position: { x: 4131, y: 585 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "0.4",
+      current: "75",
+    },
+  },
+  {
+    id: "circuitBreaker-1765271748446-0",
+    type: "circuitBreaker",
+    position: { x: 3446, y: 585 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "0.4",
+      current: "75",
+    },
+  },
+  {
+    id: "Lbs-1765272084002",
+    type: "Lbs",
+    position: { x: 2685, y: 775 },
+    width: 60,
+    height: 48,
+    data: {
+      label: "LBS ",
+      status: "CLOSE",
+      voltage: "20",
+      rotation: 270,
+    },
+  },
+  {
+    id: "Lbs-1765272157275",
+    type: "Lbs",
+    position: { x: 3040, y: 826 },
+    width: 60,
+    height: 48,
+    data: {
+      label: "LBS ",
+      status: "CLOSE",
+      voltage: "20",
+      rotation: 270,
+    },
+  },
+  {
+    id: "Lbs-1765272207762",
+    type: "Lbs",
+    position: { x: 3446, y: 878 },
+    width: 60,
+    height: 48,
+    data: {
+      label: "LBS ",
+      status: "CLOSE",
+      voltage: "20",
+      rotation: 270,
+    },
+  },
+  {
+    id: "pembangkit-1765272457257-0",
+    type: "pembangkit",
+    position: { x: 3319, y: -9 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "Pembangkit",
+      power: "200",
+      voltage: "20",
+      type: "type3",
+      status: "active",
+    },
+  },
+  {
+    id: "circuitBreaker-1765272457257-1",
+    type: "circuitBreaker",
+    position: { x: 3319, y: 99 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "20",
+      current: "100",
+    },
+  },
+  {
+    id: "trafo2Belitan-1765272457257-2",
+    type: "trafo2Belitan",
+    position: { x: 3319, y: 211 },
+    width: 60,
+    height: 71,
+    data: {
+      label: "Trafo 2 Belitan",
+      capacity: "100",
+      voltageLevel: "HV/MV",
+      ratio: "20/0.4",
+      status: "active",
+    },
+  },
+  {
+    id: "circuitBreaker-1765272457257-3",
+    type: "circuitBreaker",
+    position: { x: 3319, y: 339 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "0.4",
+      current: "150",
+    },
+  },
+  {
+    id: "pembangkit-1765272469312-0",
+    type: "pembangkit",
+    position: { x: 3674, y: -9 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "Pembangkit",
+      power: "200",
+      voltage: "20",
+      type: "type3",
+      status: "active",
+    },
+  },
+  {
+    id: "circuitBreaker-1765272469312-1",
+    type: "circuitBreaker",
+    position: { x: 3674, y: 99 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "20",
+      current: "100",
+    },
+  },
+  {
+    id: "trafo2Belitan-1765272469312-2",
+    type: "trafo2Belitan",
+    position: { x: 3674, y: 211 },
+    width: 60,
+    height: 71,
+    data: {
+      label: "Trafo 2 Belitan",
+      capacity: "100",
+      voltageLevel: "HV/MV",
+      ratio: "20/0.4",
+      status: "active",
+    },
+  },
+  {
+    id: "circuitBreaker-1765272469312-3",
+    type: "circuitBreaker",
+    position: { x: 3674, y: 339 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "0.4",
+      current: "150",
+    },
+  },
+  {
+    id: "pembangkit-1765272473726-0",
+    type: "pembangkit",
+    position: { x: 4029, y: -9 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "Pembangkit",
+      power: "200",
+      voltage: "20",
+      type: "type3",
+      status: "active",
+    },
+  },
+  {
+    id: "circuitBreaker-1765272473726-1",
+    type: "circuitBreaker",
+    position: { x: 4029, y: 99 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "20",
+      current: "100",
+    },
+  },
+  {
+    id: "trafo2Belitan-1765272473726-2",
+    type: "trafo2Belitan",
+    position: { x: 4029, y: 211 },
+    width: 60,
+    height: 71,
+    data: {
+      label: "Trafo 2 Belitan",
+      capacity: "100",
+      voltageLevel: "HV/MV",
+      ratio: "20/0.4",
+      status: "active",
+    },
+  },
+  {
+    id: "circuitBreaker-1765272473726-3",
+    type: "circuitBreaker",
+    position: { x: 4029, y: 339 },
+    width: 60,
+    height: 60,
+    data: {
+      label: "L",
+      status: "CLOSE",
+      voltage: "0.4",
+      current: "150",
+    },
+  },
+  {
+    id: "generator2-1765272763341",
     type: "generator2",
-    position: { x: 1952, y: 817 },
+    position: { x: 4530, y: 1501 },
     width: 60,
     height: 63,
     data: {
-      label: "Load 4",
+      label: "Generator 2",
       power: "150",
-      voltage: "0.4",
-      status: "active",
+      type: "type2",
     },
-    style: {
-      outline: "none",
-      outlineOffset: "0px",
+  },
+  {
+    id: "generator2-1765272903421",
+    type: "generator2",
+    position: { x: 4919, y: 1499 },
+    width: 60,
+    height: 63,
+    data: {
+      label: "Generator 2",
+      power: "150",
+      type: "type2",
+    },
+  },
+  {
+    id: "generator2-1765272931413",
+    type: "generator2",
+    position: { x: 5350, y: 1499 },
+    width: 60,
+    height: 63,
+    data: {
+      label: "Generator 2",
+      power: "150",
+      type: "type2",
     },
   },
 ];
 
+
 export const initialEdges: Edge[] = [
-  // ========== PLTMG 1 System Connections (Active - Green) ==========
+  // ========== PLTMG 1 System Connections ==========
   // Pembangkit 1 chain
   {
     id: "edge-pembangkit-1-to-cb-1",
@@ -557,12 +771,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764846131597",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -577,12 +785,6 @@ export const initialEdges: Edge[] = [
     target: "trafo2Belitan-1764846171966",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -597,12 +799,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764847022302",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -617,12 +813,6 @@ export const initialEdges: Edge[] = [
     target: "bus-1764847294829",
     targetHandle: "top-6",
     type: "smoothstep",
-    animated: false,
-    style: {
-      stroke: "#ffffff",
-      strokeWidth: 2,
-      strokeDasharray: "0",
-    },
     data: {
       isElectrical: true,
       isActive: false,
@@ -638,12 +828,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764846391332",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -658,12 +842,6 @@ export const initialEdges: Edge[] = [
     target: "trafo2Belitan-1764846457794",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -678,12 +856,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764846482778",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -698,12 +870,6 @@ export const initialEdges: Edge[] = [
     target: "bus-1764847294829",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -720,36 +886,10 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764847315418",
     targetHandle: "top",
     type: "smoothstep",
-    animated: false,
-    style: {
-      stroke: "#ffffff",
-      strokeWidth: 2,
-      strokeDasharray: "0",
-    },
     data: {
       isElectrical: true,
       isActive: false,
       edgeType: "smoothstep",
-    },
-  },
-  {
-    id: "edge-cb-5-to-load-1",
-    source: "circuitBreaker-1764847315418",
-    sourceHandle: "bottom",
-    target: "generator2-1764847404247",
-    targetHandle: "top",
-    type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
-    data: {
-      isElectrical: true,
-      isActive: true,
-      sourceVoltage: "0.4",
-      targetVoltage: "0.4",
     },
   },
   {
@@ -759,32 +899,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764847328667",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
-    data: {
-      isElectrical: true,
-      isActive: true,
-      sourceVoltage: "0.4",
-      targetVoltage: "0.4",
-    },
-  },
-  {
-    id: "edge-cb-6-to-load-2",
-    source: "circuitBreaker-1764847328667",
-    sourceHandle: "bottom",
-    target: "generator2-1764847425738",
-    targetHandle: "top",
-    type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -801,12 +915,6 @@ export const initialEdges: Edge[] = [
     target: "bus-1764847294829",
     targetHandle: "bottom-30",
     type: "smoothstep",
-    animated: false,
-    style: {
-      stroke: "#ffffff",
-      strokeWidth: 2,
-      strokeDasharray: "0",
-    },
     data: {
       isElectrical: true,
       isActive: false,
@@ -820,12 +928,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764847719637",
     targetHandle: "bottom",
     type: "smoothstep",
-    animated: false,
-    style: {
-      stroke: "#ffffff",
-      strokeWidth: 2,
-      strokeDasharray: "0",
-    },
     data: {
       isElectrical: true,
       isActive: false,
@@ -833,7 +935,7 @@ export const initialEdges: Edge[] = [
     },
   },
 
-  // ========== PLTMG 2 System Connections (Active - Green) ==========
+  // ========== PLTMG 2 System Connections ==========
   // Kopel to Bus 2
   {
     id: "reactflow__edge-bus-1764848087697bottom-6-circuitBreaker-1764847719637top",
@@ -842,12 +944,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764847719637",
     targetHandle: "top",
     type: "smoothstep",
-    animated: false,
-    style: {
-      stroke: "#ffffff",
-      strokeWidth: 2,
-      strokeDasharray: "0",
-    },
     data: {
       isElectrical: true,
       isActive: false,
@@ -863,12 +959,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764848034912",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -883,12 +973,6 @@ export const initialEdges: Edge[] = [
     target: "trafo2Belitan-1764848029726",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -903,12 +987,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764847967439",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -923,12 +1001,6 @@ export const initialEdges: Edge[] = [
     target: "bus-1764848087697",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -945,12 +1017,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764848198007",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -965,12 +1031,6 @@ export const initialEdges: Edge[] = [
     target: "trafo2Belitan-1764848180085",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -985,12 +1045,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764848008464",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -1005,12 +1059,6 @@ export const initialEdges: Edge[] = [
     target: "bus-1764848087697",
     targetHandle: "top-30",
     type: "smoothstep",
-    animated: false,
-    style: {
-      stroke: "#ffffff",
-      strokeWidth: 2,
-      strokeDasharray: "0",
-    },
     data: {
       isElectrical: true,
       isActive: false,
@@ -1026,32 +1074,6 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764847782884",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
-    data: {
-      isElectrical: true,
-      isActive: true,
-      sourceVoltage: "0.4",
-      targetVoltage: "0.4",
-    },
-  },
-  {
-    id: "edge-cb-11-to-load-3",
-    source: "circuitBreaker-1764847782884",
-    sourceHandle: "bottom",
-    target: "generator2-1764847876940",
-    targetHandle: "top",
-    type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
-    },
     data: {
       isElectrical: true,
       isActive: true,
@@ -1066,12 +1088,21 @@ export const initialEdges: Edge[] = [
     target: "circuitBreaker-1764847840934",
     targetHandle: "top",
     type: "smoothstep",
-    animated: false,
-    style: {
-      stroke: "#ffffff",
-      strokeWidth: 2,
-      strokeDasharray: "0",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
     },
+  },
+
+  // ========== Extended Bus System Connections ==========
+  {
+    id: "reactflow__edge-bus-1765271582062-0bottom-7-circuitBreaker-1765271715177-0top",
+    source: "bus-1765271582062-0",
+    sourceHandle: "bottom-7",
+    target: "circuitBreaker-1765271715177-0",
+    targetHandle: "top",
+    type: "smoothstep",
     data: {
       isElectrical: true,
       isActive: false,
@@ -1079,23 +1110,337 @@ export const initialEdges: Edge[] = [
     },
   },
   {
-    id: "edge-cb-12-to-load-4",
+    id: "reactflow__edge-bus-1765271582062-0bottom-21-circuitBreaker-1765271715177-1top",
+    source: "bus-1765271582062-0",
+    sourceHandle: "bottom-21",
+    target: "circuitBreaker-1765271715177-1",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-bus-1765271582062-0bottom-37-circuitBreaker-1765271748446-0top",
+    source: "bus-1765271582062-0",
+    sourceHandle: "bottom-37",
+    target: "circuitBreaker-1765271748446-0",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1765271747890-0top-bus-1765271582062-0bottom-64",
+    source: "circuitBreaker-1765271747890-0",
+    sourceHandle: "top",
+    target: "bus-1765271582062-0",
+    targetHandle: "bottom-64",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1765271715177-0bottom-Lbs-1765272084002top",
+    source: "circuitBreaker-1765271715177-0",
+    sourceHandle: "bottom",
+    target: "Lbs-1765272084002",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1765271715177-1bottom-Lbs-1765272157275top",
+    source: "circuitBreaker-1765271715177-1",
+    sourceHandle: "bottom",
+    target: "Lbs-1765272157275",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1765271748446-0bottom-Lbs-1765272207762top",
+    source: "circuitBreaker-1765271748446-0",
+    sourceHandle: "bottom",
+    target: "Lbs-1765272207762",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1764847315418bottom-Lbs-1765272084002bottom",
+    source: "circuitBreaker-1764847315418",
+    sourceHandle: "bottom",
+    target: "Lbs-1765272084002",
+    targetHandle: "bottom",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1764847328667bottom-Lbs-1765272157275bottom",
+    source: "circuitBreaker-1764847328667",
+    sourceHandle: "bottom",
+    target: "Lbs-1765272157275",
+    targetHandle: "bottom",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1764847782884bottom-Lbs-1765272207762bottom",
+    source: "circuitBreaker-1764847782884",
+    sourceHandle: "bottom",
+    target: "Lbs-1765272207762",
+    targetHandle: "bottom",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1764847840934bottom-circuitBreaker-1765271747890-0bottom",
     source: "circuitBreaker-1764847840934",
     sourceHandle: "bottom",
-    target: "generator2-1764847922147",
+    target: "circuitBreaker-1765271747890-0",
+    targetHandle: "bottom",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "edge-1765272457257-0",
+    source: "pembangkit-1765272457257-0",
+    sourceHandle: "bottom",
+    target: "circuitBreaker-1765272457257-1",
     targetHandle: "top",
     type: "customizable",
-    animated: true,
-    style: {
-      stroke: "#22c55e",
-      strokeWidth: 3,
-      strokeDasharray: "5,5",
+    data: {
+      isElectrical: true,
+      isActive: true,
+      sourceVoltage: "20",
+      targetVoltage: "20",
     },
+  },
+  {
+    id: "edge-1765272457257-1",
+    source: "circuitBreaker-1765272457257-1",
+    sourceHandle: "bottom",
+    target: "trafo2Belitan-1765272457257-2",
+    targetHandle: "top",
+    type: "customizable",
+    data: {
+      isElectrical: true,
+      isActive: true,
+      sourceVoltage: "20",
+      targetVoltage: "20",
+    },
+  },
+  {
+    id: "edge-1765272457257-2",
+    source: "trafo2Belitan-1765272457257-2",
+    sourceHandle: "bottom",
+    target: "circuitBreaker-1765272457257-3",
+    targetHandle: "top",
+    type: "customizable",
     data: {
       isElectrical: true,
       isActive: true,
       sourceVoltage: "0.4",
       targetVoltage: "0.4",
+    },
+  },
+  {
+    id: "edge-1765272469312-0",
+    source: "pembangkit-1765272469312-0",
+    sourceHandle: "bottom",
+    target: "circuitBreaker-1765272469312-1",
+    targetHandle: "top",
+    type: "customizable",
+    data: {
+      isElectrical: true,
+      isActive: true,
+      sourceVoltage: "20",
+      targetVoltage: "20",
+    },
+  },
+  {
+    id: "edge-1765272469312-1",
+    source: "circuitBreaker-1765272469312-1",
+    sourceHandle: "bottom",
+    target: "trafo2Belitan-1765272469312-2",
+    targetHandle: "top",
+    type: "customizable",
+    data: {
+      isElectrical: true,
+      isActive: true,
+      sourceVoltage: "20",
+      targetVoltage: "20",
+    },
+  },
+  {
+    id: "edge-1765272469312-2",
+    source: "trafo2Belitan-1765272469312-2",
+    sourceHandle: "bottom",
+    target: "circuitBreaker-1765272469312-3",
+    targetHandle: "top",
+    type: "customizable",
+    data: {
+      isElectrical: true,
+      isActive: true,
+      sourceVoltage: "0.4",
+      targetVoltage: "0.4",
+    },
+  },
+  {
+    id: "edge-1765272473726-0",
+    source: "pembangkit-1765272473726-0",
+    sourceHandle: "bottom",
+    target: "circuitBreaker-1765272473726-1",
+    targetHandle: "top",
+    type: "customizable",
+    data: {
+      isElectrical: true,
+      isActive: true,
+      sourceVoltage: "20",
+      targetVoltage: "20",
+    },
+  },
+  {
+    id: "edge-1765272473726-1",
+    source: "circuitBreaker-1765272473726-1",
+    sourceHandle: "bottom",
+    target: "trafo2Belitan-1765272473726-2",
+    targetHandle: "top",
+    type: "customizable",
+    data: {
+      isElectrical: true,
+      isActive: true,
+      sourceVoltage: "20",
+      targetVoltage: "20",
+    },
+  },
+  {
+    id: "edge-1765272473726-2",
+    source: "trafo2Belitan-1765272473726-2",
+    sourceHandle: "bottom",
+    target: "circuitBreaker-1765272473726-3",
+    targetHandle: "top",
+    type: "customizable",
+    data: {
+      isElectrical: true,
+      isActive: true,
+      sourceVoltage: "0.4",
+      targetVoltage: "0.4",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1765272469312-3bottom-bus-1765271582062-0top",
+    source: "circuitBreaker-1765272469312-3",
+    sourceHandle: "bottom",
+    target: "bus-1765271582062-0",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1765272457257-3bottom-bus-1765271582062-0top-32",
+    source: "circuitBreaker-1765272457257-3",
+    sourceHandle: "bottom",
+    target: "bus-1765271582062-0",
+    targetHandle: "top-32",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1765272473726-3bottom-bus-1765271582062-0top-60",
+    source: "circuitBreaker-1765272473726-3",
+    sourceHandle: "bottom",
+    target: "bus-1765271582062-0",
+    targetHandle: "top-60",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1764847315418bottom-generator2-1765272763341top",
+    source: "circuitBreaker-1764847315418",
+    sourceHandle: "bottom",
+    target: "generator2-1765272763341",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1764847328667bottom-generator2-1765272903421top",
+    source: "circuitBreaker-1764847328667",
+    sourceHandle: "bottom",
+    target: "generator2-1765272903421",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
+    },
+  },
+  {
+    id: "reactflow__edge-circuitBreaker-1765271747890-0bottom-generator2-1765272931413top",
+    source: "circuitBreaker-1765271747890-0",
+    sourceHandle: "bottom",
+    target: "generator2-1765272931413",
+    targetHandle: "top",
+    type: "smoothstep",
+    data: {
+      isElectrical: true,
+      isActive: false,
+      edgeType: "smoothstep",
     },
   },
 ];
