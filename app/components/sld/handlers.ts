@@ -314,13 +314,37 @@ export const createUpdateNodeHandler = (
   setSelectedNode: (fn: (prev: Node | null) => Node | null) => void
 ) => {
   return (nodeId: string, newData: any) => {
+    // Check if newData contains special __nodeSize property
+    const { __nodeSize, ...dataWithoutSize } = newData;
+    
     setNodes((nds) =>
-      nds.map((node) => (node.id === nodeId ? { ...node, data: newData } : node))
+      nds.map((node) => {
+        if (node.id === nodeId) {
+          const updatedNode = { ...node, data: dataWithoutSize };
+          // If __nodeSize is provided, update node's width and height at root level
+          if (__nodeSize) {
+            updatedNode.width = __nodeSize.width;
+            updatedNode.height = __nodeSize.height;
+          }
+          return updatedNode;
+        }
+        return node;
+      })
     );
+    
     // Update selected node to reflect changes
-    setSelectedNode((prev) =>
-      prev && prev.id === nodeId ? { ...prev, data: newData } : prev
-    );
+    setSelectedNode((prev) => {
+      if (prev && prev.id === nodeId) {
+        const updatedNode = { ...prev, data: dataWithoutSize };
+        // If __nodeSize is provided, update node's width and height at root level
+        if (__nodeSize) {
+          updatedNode.width = __nodeSize.width;
+          updatedNode.height = __nodeSize.height;
+        }
+        return updatedNode;
+      }
+      return prev;
+    });
   };
 };
 
@@ -528,6 +552,8 @@ export const createDropHandler = (
       type,
       position: snappedPosition,
       data: JSON.parse(dataStr),
+      width: 60,
+      height: 60,
     };
 
     setNodes((nds) => nds.concat(newNode));

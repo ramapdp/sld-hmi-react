@@ -1,9 +1,22 @@
 import { memo } from "react";
 import { Handle, Position, NodeResizer, useReactFlow } from "reactflow";
+import type { Node } from "reactflow";
+import type { BusbarNodeData } from "~/types/node-data.types";
 
-export const BusbarNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 200, height: 20 };
+interface BusbarNodeProps {
+  data: BusbarNodeData;
+  selected: boolean;
+  id: string;
+}
+
+export const BusbarNode = memo(({ data, selected, id }: BusbarNodeProps) => {
+  const { setNodes, getNode } = useReactFlow();
+  
+  // Get size from node root level, not from data
+  const node = getNode(id) as Node<BusbarNodeData> | undefined;
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 200, height: 20 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -11,10 +24,9 @@ export const BusbarNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              // Set size at root level, not in data
+              width: params.width,
+              height: params.height,
             }
           : node
       )

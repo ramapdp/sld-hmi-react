@@ -1,7 +1,9 @@
 import React from "react";
+import type { Node } from "reactflow";
+import type { TransformerNodeData } from "~/types/node-data.types";
 
 interface TransformerCommandsProps {
-  nodeData: any;
+  nodeData: Node<TransformerNodeData>;
   nodeId: string;
   onUpdateNode: (nodeId: string, newData: any) => void;
   mode: "edit" | "command";
@@ -13,18 +15,20 @@ export const TransformerCommands: React.FC<TransformerCommandsProps> = ({
   onUpdateNode,
   mode,
 }) => {
+  const data = nodeData.data;
+  
   return (
     <div className="space-y-2">
       <button
         onClick={() => {
           onUpdateNode(nodeId, {
-            ...nodeData,
+            ...data,
             status: "active",
           });
         }}
-        disabled={nodeData.status === "active" || mode !== "command"}
+        disabled={data.status === "active" || mode !== "command"}
         className={`w-full px-3 py-2 text-[12px] border rounded text-left transition-all ${
-          nodeData.status === "active"
+          data.status === "active"
             ? "border-gray-400 bg-gray-400/10 text-gray-500 cursor-not-allowed"
             : mode === "command"
             ? "border-green-500 bg-green-500/10 hover:bg-green-500/20 text-green-600 dark:text-green-400 cursor-pointer"
@@ -36,17 +40,17 @@ export const TransformerCommands: React.FC<TransformerCommandsProps> = ({
       <button
         onClick={() => {
           onUpdateNode(nodeId, {
-            ...nodeData,
+            ...data,
             status: "inactive",
           });
         }}
         disabled={
-          nodeData.status === "inactive" ||
-          !nodeData.status ||
+          data.status === "inactive" ||
+          !data.status ||
           mode !== "command"
         }
         className={`w-full px-3 py-2 text-[12px] border rounded text-left transition-all ${
-          nodeData.status === "inactive" || !nodeData.status
+          data.status === "inactive" || !data.status
             ? "border-gray-400 bg-gray-400/10 text-gray-500 cursor-not-allowed"
             : mode === "command"
             ? "border-red-500 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 cursor-pointer"

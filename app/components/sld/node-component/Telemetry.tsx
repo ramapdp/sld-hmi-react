@@ -11,8 +11,11 @@ import CurrentT from "~/assets/icons/telemetry/draw-tele-08.svg";
 import CustomTelemetry from "~/assets/icons/telemetry/draw-tele-09.svg";
 
 export const TapChangerNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -20,10 +23,8 @@ export const TapChangerNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -62,8 +63,11 @@ export const TapChangerNode = memo(({ data, selected, id }) => {
 });
 
 export const FrequencyNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -71,10 +75,8 @@ export const FrequencyNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -113,8 +115,11 @@ export const FrequencyNode = memo(({ data, selected, id }) => {
 });
 
 export const VoltageNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -122,10 +127,8 @@ export const VoltageNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -164,8 +167,11 @@ export const VoltageNode = memo(({ data, selected, id }) => {
 });
 
 export const PowerActiveNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -173,10 +179,8 @@ export const PowerActiveNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -215,8 +219,11 @@ export const PowerActiveNode = memo(({ data, selected, id }) => {
 });
 
 export const PowerReactiveNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -224,10 +231,8 @@ export const PowerReactiveNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -266,8 +271,11 @@ export const PowerReactiveNode = memo(({ data, selected, id }) => {
 });
 
 export const CurrentRNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -275,10 +283,8 @@ export const CurrentRNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -317,8 +323,11 @@ export const CurrentRNode = memo(({ data, selected, id }) => {
 });
 
 export const CurrentSNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -326,10 +335,8 @@ export const CurrentSNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -368,8 +375,11 @@ export const CurrentSNode = memo(({ data, selected, id }) => {
 });
 
 export const CurrentTNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -377,10 +387,8 @@ export const CurrentTNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -419,8 +427,11 @@ export const CurrentTNode = memo(({ data, selected, id }) => {
 });
 
 export const CustomTelemetryNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -428,10 +439,8 @@ export const CustomTelemetryNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )

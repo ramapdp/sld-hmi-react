@@ -14,7 +14,6 @@ export interface PembangkitNodeData {
   power?: string;
   voltage?: string;
   type?: string;
-  size?: { width: number; height: number };
   status?: "active" | "inactive";
   colorConfig?: ColorConfig;
 }
@@ -30,6 +29,7 @@ export interface SwitchNodeData {
   label?: string;
   position?: "OPEN" | "CLOSE";
   voltage?: string;
+  rotation?: number;
   colorConfig?: {
     open: string;   // Hex color when open
     close: string;  // Hex color when close
@@ -41,6 +41,7 @@ export interface CircuitBreakerNodeData {
   status?: "OPEN" | "CLOSE";
   voltage?: string;
   current?: string;
+  rotation?: number;
   colorConfig?: {
     open: string;   // Hex color when open
     close: string;  // Hex color when close
@@ -53,7 +54,6 @@ export interface TransformerNodeData {
   ratio?: string;
   voltageLevel?: string;
   capacity?: string;
-  size?: { width: number; height: number };
   status?: "active" | "inactive";
   colorConfig?: ColorConfig;
 }
@@ -71,7 +71,6 @@ export interface LoadNodeData {
 export interface BusbarNodeData {
   label?: string;
   voltage?: string;
-  size?: { width: number; height: number };
   fill?: string;
   stroke?: string;
 }

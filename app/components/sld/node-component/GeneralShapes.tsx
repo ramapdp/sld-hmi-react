@@ -5,8 +5,11 @@ import Square from "~/assets/icons/general/Frame 481.svg";
 import Home from "~/assets/icons/general/Frame 483.svg";
 
 export const TriangleNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -14,10 +17,8 @@ export const TriangleNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -56,8 +57,11 @@ export const TriangleNode = memo(({ data, selected, id }) => {
 });
 
 export const SquareNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -65,10 +69,8 @@ export const SquareNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -107,8 +109,11 @@ export const SquareNode = memo(({ data, selected, id }) => {
 });
 
 export const HomeNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -116,10 +121,8 @@ export const HomeNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )

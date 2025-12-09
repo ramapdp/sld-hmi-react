@@ -100,6 +100,8 @@ export const CommonProperties: React.FC<CommonPropertiesProps> = ({
               const isSource = edge.source === node.id;
               const connectedNodeId = isSource ? edge.target : edge.source;
               const connectedNode = nodes.find((n) => n.id === connectedNodeId);
+              console.log("Connected Node:", connectedNode);
+              console.log("Connected Node ID:", connectedNodeId);
 
               return (
                 <div

@@ -37,6 +37,14 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   );
   const [isEditMode, setIsEditMode] = useState(false);
 
+  // Get node data - BEFORE any conditional returns
+  const nodeData = selectedNode;
+  const nodeType = selectedNode?.type || "";
+
+  // Get edge data - BEFORE any conditional returns
+  const edgeStyle = selectedEdge?.style || {};
+  const edgeData = selectedEdge?.data || {};
+
   useEffect(() => {
     setIsEditMode(false);
   }, [selectedNode?.id, selectedEdge?.id]);
@@ -46,15 +54,9 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     setActiveTab(mode === "edit" ? "properties" : "command");
   }, [mode]);
 
-  if (!selectedNode && !selectedEdge) return null;
-
-  // Node Properties
-  if (selectedNode) {
-    const nodeData = selectedNode.data;
-    const nodeType = selectedNode.type || "";
-
-    // Memoize node-specific properties rendering untuk avoid re-render
-    const renderSpecificProperties = useMemo(() => {
+  // Memoize node-specific properties rendering - BEFORE conditional returns
+  const renderSpecificProperties = useMemo(() => {
+    if (!selectedNode || !nodeData) return null;
       switch (nodeType) {
         case "pembangkit":
           return (
@@ -101,10 +103,10 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         default:
           // For shapes (text, rectangle, circle) and other nodes
           if (
-            nodeData.fontSize !== undefined ||
-            nodeData.fill !== undefined ||
-            nodeData.width !== undefined ||
-            nodeData.radius !== undefined
+            nodeData.data.fontSize !== undefined ||
+            nodeData.data.fill !== undefined ||
+            nodeData.data.width !== undefined ||
+            nodeData.data.radius !== undefined
           ) {
             return (
               <ShapeProperties
@@ -117,10 +119,11 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           }
           return null;
       }
-    }, [nodeType, nodeData, selectedNode.id, isEditMode, onUpdateNode]);
+    }, [nodeType, nodeData, selectedNode?.id, isEditMode, onUpdateNode]);
 
-    // Memoize node-specific commands rendering
-    const renderSpecificCommands = useMemo(() => {
+  // Memoize node-specific commands rendering
+  const renderSpecificCommands = useMemo(() => {
+    if (!selectedNode || !nodeData) return null;
       switch (nodeType) {
         case "pembangkit":
           return (
@@ -173,8 +176,13 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             </div>
           );
       }
-    }, [nodeType, nodeData, selectedNode.id, onUpdateNode, mode]);
+    }, [nodeType, nodeData, selectedNode?.id, onUpdateNode, mode]);
 
+  // Early return AFTER all hooks
+  if (!selectedNode && !selectedEdge) return null;
+
+  // Node Properties
+  if (selectedNode) {
     return (
       <aside className="flex flex-col w-80 my-1 border border-[#494949] p-2 gap-2 overflow-hidden rounded-md">
         {/* Tab Navigation */}
@@ -207,7 +215,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             <div className="space-y-4">
               {/* Common Properties for all nodes */}
               <CommonProperties
-                node={selectedNode}
+                node={selectedNode!}
                 isEditMode={isEditMode}
                 onUpdateNode={onUpdateNode}
                 edges={edges}
@@ -242,7 +250,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         </div>
 
         {/* Edit/Save Button */}
-        {activeTab === "properties" && (
+        {mode === "edit" && activeTab === "properties" && (
           <div className="flex justify-start items-center">
             <button
               onClick={() => setIsEditMode(!isEditMode)}
@@ -258,9 +266,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
   // Edge Properties
   if (selectedEdge) {
-    const edgeStyle = selectedEdge.style || {};
-    const edgeData = selectedEdge.data || {};
-
     return (
       <aside className="w-80 my-1 border border-[#494949] p-4 overflow-auto rounded-md">
         <div className="flex justify-between items-center mb-4">

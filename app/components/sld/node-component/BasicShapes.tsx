@@ -3,11 +3,11 @@ import { Handle, Position, NodeResizer, useReactFlow } from "reactflow";
 
 // Line Node
 export const LineNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || {
-    width: data.length || 100,
-    height: 10,
-  };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: data.length || 100, height: 10 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -15,10 +15,8 @@ export const LineNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -60,12 +58,12 @@ export const LineNode = memo(({ data, selected, id }) => {
 });
 
 // Custom SVG Node
-export const CustomSVGNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || {
-    width: data.width || 100,
-    height: data.height || 100,
-  };
+export const CustomSVGNode = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: data.width || 100, height: data.height || 100 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -73,10 +71,8 @@ export const CustomSVGNode = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -135,7 +131,7 @@ export const CustomSVGNode = memo(({ data, selected, id }) => {
 });
 
 // Text Node
-export const TextNode = memo(({ data, selected }) => {
+export const TextNode = memo(({ data, selected }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(data.label || "Text");
 
@@ -179,7 +175,7 @@ export const TextNode = memo(({ data, selected }) => {
 });
 
 // Rectangle Node
-export const RectangleNode = memo(({ data, selected }) => {
+export const RectangleNode = memo(({ data, selected }: any) => {
   return (
     <div
       style={{
@@ -208,7 +204,7 @@ export const RectangleNode = memo(({ data, selected }) => {
 });
 
 // Circle Node
-export const CircleNode = memo(({ data, selected }) => {
+export const CircleNode = memo(({ data, selected }: any) => {
   return (
     <div
       style={{

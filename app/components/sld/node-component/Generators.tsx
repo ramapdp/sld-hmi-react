@@ -50,8 +50,11 @@ export const Generator2Node = memo(({ data }) => {
 });
 
 export const Generator3Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -59,10 +62,8 @@ export const Generator3Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )

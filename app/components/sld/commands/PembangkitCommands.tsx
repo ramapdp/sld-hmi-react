@@ -1,7 +1,9 @@
 import React, { memo } from "react";
+import type { Node } from "reactflow";
+import type { PembangkitNodeData } from "~/types/node-data.types";
 
 interface PembangkitCommandsProps {
-  nodeData: any;
+  nodeData: Node<PembangkitNodeData>;
   nodeId: string;
   onUpdateNode: (nodeId: string, newData: any) => void;
   mode: "edit" | "command";
@@ -13,18 +15,20 @@ export const PembangkitCommands: React.FC<PembangkitCommandsProps> = memo(({
   onUpdateNode,
   mode,
 }) => {
+  const data = nodeData.data;
+  
   return (
     <div className="space-y-2">
       <button
         onClick={() => {
           onUpdateNode(nodeId, {
-            ...nodeData,
+            ...data,
             status: "active",
           });
         }}
-        disabled={nodeData.status === "active" || mode !== "command"}
+        disabled={data.status === "active" || mode !== "command"}
         className={`w-full px-3 py-2 text-[12px] border rounded text-left transition-all ${
-          nodeData.status === "active"
+          data.status === "active"
             ? "border-gray-400 bg-gray-400/10 text-gray-500 cursor-not-allowed"
             : mode === "command"
             ? "border-green-500 bg-green-500/10 hover:bg-green-500/20 text-green-600 dark:text-green-400 cursor-pointer"
@@ -32,24 +36,24 @@ export const PembangkitCommands: React.FC<PembangkitCommandsProps> = memo(({
         }`}
       >
         ▶ START Generator
-        {nodeData.status === "active" && (
+        {data.status === "active" && (
           <span className="ml-2 text-[10px]">(Running)</span>
         )}
       </button>
       <button
         onClick={() => {
           onUpdateNode(nodeId, {
-            ...nodeData,
+            ...data,
             status: "inactive",
           });
         }}
         disabled={
-          nodeData.status === "inactive" ||
-          !nodeData.status ||
+          data.status === "inactive" ||
+          !data.status ||
           mode !== "command"
         }
         className={`w-full px-3 py-2 text-[12px] border rounded text-left transition-all ${
-          nodeData.status === "inactive" || !nodeData.status
+          data.status === "inactive" || !data.status
             ? "border-gray-400 bg-gray-400/10 text-gray-500 cursor-not-allowed"
             : mode === "command"
             ? "border-red-500 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 cursor-pointer"
@@ -57,27 +61,27 @@ export const PembangkitCommands: React.FC<PembangkitCommandsProps> = memo(({
         }`}
       >
         ⏹ STOP Generator
-        {(nodeData.status === "inactive" || !nodeData.status) && (
+        {(data.status === "inactive" || !data.status) && (
           <span className="ml-2 text-[10px]">(Stopped)</span>
         )}
       </button>
       <button
         onClick={() => {
-          if (nodeData.status === "active") {
+          if (data.status === "active") {
             alert("Syncing generator to grid...");
           } else {
             alert("Generator must be running to sync to grid");
           }
         }}
-        disabled={nodeData.status !== "active" || mode !== "command"}
+        disabled={data.status !== "active" || mode !== "command"}
         className={`w-full px-3 py-2 text-[12px] border rounded text-left transition-all ${
-          nodeData.status !== "active" || mode !== "command"
+          data.status !== "active" || mode !== "command"
             ? "border-gray-400 bg-gray-400/10 text-gray-500 cursor-not-allowed"
             : "border-yellow-500 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 cursor-pointer"
         }`}
       >
         ⚡ SYNC to Grid
-        {nodeData.status !== "active" && (
+        {data.status !== "active" && (
           <span className="ml-2 text-[10px]">(Requires Active)</span>
         )}
       </button>
@@ -88,23 +92,23 @@ export const PembangkitCommands: React.FC<PembangkitCommandsProps> = memo(({
         <div className="flex items-center gap-2">
           <div
             className={`w-2 h-2 rounded-full ${
-              nodeData.status === "active"
+              data.status === "active"
                 ? "bg-green-500 animate-pulse"
                 : "bg-gray-500"
             }`}
           />
           <span className="text-[12px]">
-            {nodeData.status === "active" ? "Running" : "Stopped"}
+            {data.status === "active" ? "Running" : "Stopped"}
           </span>
         </div>
-        {nodeData.power && (
+        {data.power && (
           <div className="text-[10px] text-gray-400 mt-2">
-            Power: {nodeData.power} MW
+            Power: {data.power} MW
           </div>
         )}
-        {nodeData.voltage && (
+        {data.voltage && (
           <div className="text-[10px] text-gray-400">
-            Voltage: {nodeData.voltage} kV
+            Voltage: {data.voltage} kV
           </div>
         )}
       </div>
@@ -115,9 +119,9 @@ export const PembangkitCommands: React.FC<PembangkitCommandsProps> = memo(({
   return (
     prevProps.nodeId === nextProps.nodeId &&
     prevProps.mode === nextProps.mode &&
-    prevProps.nodeData.status === nextProps.nodeData.status &&
-    prevProps.nodeData.power === nextProps.nodeData.power &&
-    prevProps.nodeData.voltage === nextProps.nodeData.voltage
+    prevProps.nodeData.data.status === nextProps.nodeData.data.status &&
+    prevProps.nodeData.data.power === nextProps.nodeData.data.power &&
+    prevProps.nodeData.data.voltage === nextProps.nodeData.data.voltage
   );
 });
 

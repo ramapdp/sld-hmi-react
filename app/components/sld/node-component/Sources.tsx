@@ -1,12 +1,19 @@
 import { memo, useCallback, useMemo } from "react";
 import { Handle, Position, NodeResizer, useReactFlow } from "reactflow";
+import type { Node } from "reactflow";
 import Source2 from "~/assets/icons/sources/Frame 479.svg";
 import type { PembangkitNodeData } from "~/types/node-data.types";
 
+interface PembangkitNodeProps {
+  data: PembangkitNodeData;
+  selected: boolean;
+  id: string;
+}
+
 // Custom comparison function untuk memo
 const arePropsEqual = (
-  prevProps: { data: PembangkitNodeData; selected: boolean; id: string },
-  nextProps: { data: PembangkitNodeData; selected: boolean; id: string }
+  prevProps: PembangkitNodeProps,
+  nextProps: PembangkitNodeProps
 ) => {
   // Check basic props
   if (prevProps.id !== nextProps.id || prevProps.selected !== nextProps.selected) {
@@ -22,18 +29,22 @@ const arePropsEqual = (
     prevData.label === nextData.label &&
     prevData.power === nextData.power &&
     prevData.voltage === nextData.voltage &&
-    prevData.size?.width === nextData.size?.width &&
-    prevData.size?.height === nextData.size?.height &&
     prevData.colorConfig?.active === nextData.colorConfig?.active &&
     prevData.colorConfig?.inactive === nextData.colorConfig?.inactive
   );
 };
 
-export const PembangkitNode = memo(({ data, selected, id }: { data: PembangkitNodeData; selected: boolean; id: string }) => {
-  const { setNodes } = useReactFlow();
+export const PembangkitNode = memo(({ data, selected, id }: PembangkitNodeProps) => {
+  const { setNodes, getNode } = useReactFlow();
   
-  // Memoize size calculation
-  const size = useMemo(() => data.size || { width: 60, height: 60 }, [data.size?.width, data.size?.height]);
+  // Get size from node (not from data)
+  const node = getNode(id);
+  const size = useMemo(() => {
+    if (node && 'width' in node && 'height' in node) {
+      return { width: node.width as number, height: node.height as number };
+    }
+    return { width: 60, height: 60 };
+  }, [node]);
   
   // Memoize color config
   const colorConfig = useMemo(() => data.colorConfig || {
@@ -54,10 +65,8 @@ export const PembangkitNode = memo(({ data, selected, id }: { data: PembangkitNo
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Handle, Position, NodeResizer, useReactFlow } from "reactflow";
-import PowerElectronic1 from "~/assets/icons/power-electronic-devices/Frame 478.svg";
+import type { CircuitBreakerNodeData } from "~/types/node-data.types";
 import PowerElectronic2 from "~/assets/icons/power-electronic-devices/Frame 479.svg";
 import PowerElectronic3 from "~/assets/icons/power-electronic-devices/Frame 480.svg";
 import PowerElectronic4 from "~/assets/icons/power-electronic-devices/Frame 481.svg";
@@ -16,60 +16,131 @@ import PowerElectronic13 from "~/assets/icons/power-electronic-devices/Frame 487
 import PowerElectronic14 from "~/assets/icons/power-electronic-devices/Frame 488.svg";
 import PowerElectronic15 from "~/assets/icons/power-electronic-devices/Frame 489.svg";
 
-export const CircuitBreakerNode = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const CircuitBreakerNode = memo(
+  ({
+    data,
+    selected,
+    id,
+  }: {
+    data: CircuitBreakerNodeData;
+    selected: boolean;
+    id: string;
+  }) => {
+    const { setNodes, getNode } = useReactFlow();
+    const node = getNode(id);
+    const size =
+      node?.width && node?.height
+        ? { width: node.width, height: node.height }
+        : { width: 60, height: 60 };
 
-  const handleResize = (e: any, params: any) => {
-    setNodes((nds) =>
-      nds.map((node) =>
-        node.id === id
-          ? {
-              ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
-            }
-          : node
-      )
+    const handleResize = (e: any, params: any) => {
+      setNodes((nds) =>
+        nds.map((node) =>
+          node.id === id
+            ? {
+                ...node,
+                width: params.width,
+                height: params.height,
+              }
+            : node
+        )
+      );
+    };
+
+    // Default colors
+    const defaultColors = {
+      open: "#FFFF00", // Yellow when open
+      close: "#FF0000", // Green when closed
+      invalid: "#C800FF", // Purple when invalid
+    };
+
+    // Get colors based on status
+    const getColors = () => {
+      if (data.status === "CLOSE") {
+        const closeColor = data.colorConfig?.close || defaultColors.close;
+        return { fill: closeColor, stroke: closeColor };
+      } else if (data.status === "OPEN") {
+        const openColor = data.colorConfig?.open || defaultColors.open;
+        return { fill: "none", stroke: openColor };
+      } else {
+        // Invalid/undefined status
+        const invalidColor = defaultColors.invalid;
+        return { fill: invalidColor, stroke: invalidColor, halfFill: true };
+      }
+    };
+
+    const colors = getColors();
+
+    return (
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {selected && (
+          <NodeResizer
+            minWidth={size.width || 30}
+            minHeight={size.height || 30}
+            isVisible={selected}
+            lineClassName="border-blue-500"
+            onResize={handleResize}
+          />
+        )}
+        <Handle position={Position.Top} id="top" />
+        <svg
+          width={size.width}
+          height={size.height}
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            {colors.halfFill && (
+              <linearGradient id={`half-fill-${id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="50%" stopColor="transparent" stopOpacity="0" />
+                <stop offset="50%" stopColor={colors.fill} stopOpacity="1" />
+              </linearGradient>
+            )}
+          </defs>
+          
+          {/* Main square fill */}
+          <rect
+            x="4"
+            y="4"
+            width="12"
+            height="12"
+            fill={colors.halfFill ? `url(#half-fill-${id})` : colors.fill}
+          />
+          
+          {/* Border */}
+          <rect
+            x="4"
+            y="4"
+            width="12"
+            height="12"
+            fill="none"
+            stroke={colors.stroke}
+            strokeWidth="1"
+          />
+        </svg>
+        <Handle position={Position.Bottom} id="bottom" />
+        <Handle position={Position.Left} id="left" />
+        <Handle position={Position.Right} id="right" />
+      </div>
     );
-  };
-  
-  return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {selected && (
-        <NodeResizer
-          minWidth={size.width || 30}
-          minHeight={size.height || 30}
-          isVisible={selected}
-          lineClassName="border-blue-500"
-          onResize={handleResize}
-        />
-      )}
-      <Handle position={Position.Top} id="top" />
-      <img
-        src={PowerElectronic1}
-        alt="Circuit Breaker"
-        style={{ width: size.width, height: size.height }}
-      />
-      <Handle position={Position.Bottom} id="bottom" />
-      <Handle position={Position.Left} id="left" />
-      <Handle position={Position.Right} id="right" />
-    </div>
-  );
-});
+  }
+);
 
-export const PowerElectronic2Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic2Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -77,10 +148,8 @@ export const PowerElectronic2Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -118,9 +187,13 @@ export const PowerElectronic2Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic3Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic3Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -128,10 +201,8 @@ export const PowerElectronic3Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -169,9 +240,13 @@ export const PowerElectronic3Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic4Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic4Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -179,10 +254,8 @@ export const PowerElectronic4Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -220,9 +293,13 @@ export const PowerElectronic4Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic5Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic5Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -230,10 +307,8 @@ export const PowerElectronic5Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -271,9 +346,13 @@ export const PowerElectronic5Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic6Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic6Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -281,10 +360,8 @@ export const PowerElectronic6Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -322,9 +399,13 @@ export const PowerElectronic6Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic7Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic7Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -332,10 +413,8 @@ export const PowerElectronic7Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -373,9 +452,13 @@ export const PowerElectronic7Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic8Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic8Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -383,10 +466,8 @@ export const PowerElectronic8Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -424,9 +505,13 @@ export const PowerElectronic8Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic9Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic9Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -434,10 +519,8 @@ export const PowerElectronic9Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -475,9 +558,13 @@ export const PowerElectronic9Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic10Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic10Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -485,10 +572,8 @@ export const PowerElectronic10Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -526,9 +611,13 @@ export const PowerElectronic10Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic11Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic11Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -536,10 +625,8 @@ export const PowerElectronic11Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -577,9 +664,13 @@ export const PowerElectronic11Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic12Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic12Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -587,10 +678,8 @@ export const PowerElectronic12Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -628,9 +717,13 @@ export const PowerElectronic12Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic13Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic13Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -638,10 +731,8 @@ export const PowerElectronic13Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -679,9 +770,13 @@ export const PowerElectronic13Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic14Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic14Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -689,10 +784,8 @@ export const PowerElectronic14Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -730,9 +823,13 @@ export const PowerElectronic14Node = memo(({ data, selected, id }) => {
   );
 });
 
-export const PowerElectronic15Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+export const PowerElectronic15Node = memo(({ data, selected, id }: any) => {
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size =
+    node?.width && node?.height
+      ? { width: node.width, height: node.height }
+      : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -740,10 +837,8 @@ export const PowerElectronic15Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )

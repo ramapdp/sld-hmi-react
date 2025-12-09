@@ -1,37 +1,34 @@
-import React from "react";
+import React, { memo } from "react";
+import type { Node } from "reactflow";
 
 interface ShapePropertiesProps {
-  nodeData: any;
+  nodeData: Node<any>;
   nodeId: string;
   isEditMode: boolean;
   onUpdateNode: (nodeId: string, newData: any) => void;
 }
 
-export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
-  nodeData,
-  nodeId,
-  isEditMode,
-  onUpdateNode,
-}) => {
-  return (
-    <>
-      {/* Text Node Properties */}
-      {nodeData.fontSize !== undefined && (
-        <>
-          <div>
-            <label className="block text-[12px] font-medium mb-1">
-              Font Size
-            </label>
-            <input
-              type="number"
-              value={nodeData.fontSize}
-              disabled={!isEditMode}
-              onChange={(e) =>
-                onUpdateNode(nodeId, {
-                  ...nodeData,
-                  fontSize: parseInt(e.target.value),
-                })
-              }
+export const ShapeProperties: React.FC<ShapePropertiesProps> = memo(
+  ({ nodeData, nodeId, isEditMode, onUpdateNode }) => {
+    return (
+      <>
+        {/* Text Node Properties */}
+        {nodeData.data.fontSize !== undefined && (
+          <>
+            <div>
+              <label className="block text-[12px] font-medium mb-1">
+                Font Size
+              </label>
+              <input
+                type="number"
+                value={nodeData.data.fontSize}
+                disabled={!isEditMode}
+                onChange={(e) =>
+                  onUpdateNode(nodeId, {
+                    ...nodeData.data,
+                    fontSize: parseInt(e.target.value),
+                  })
+                }
               className={`w-full px-3 py-2 text-[12px] border border-gray-300 dark:border-gray-600 rounded ${
                 isEditMode
                   ? "bg-white dark:bg-gray-800"
@@ -43,11 +40,11 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
             <label className="block text-[12px] font-medium mb-1">Color</label>
             <input
               type="color"
-              value={nodeData.color}
+              value={nodeData.data.color}
               disabled={!isEditMode}
               onChange={(e) =>
                 onUpdateNode(nodeId, {
-                  ...nodeData,
+                  ...nodeData.data,
                   color: e.target.value,
                 })
               }
@@ -62,11 +59,11 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
             <label className="flex items-center gap-2 text-[12px]">
               <input
                 type="checkbox"
-                checked={nodeData.bold || false}
+                checked={nodeData.data.bold || false}
                 disabled={!isEditMode}
                 onChange={(e) =>
                   onUpdateNode(nodeId, {
-                    ...nodeData,
+                    ...nodeData.data,
                     bold: e.target.checked,
                   })
                 }
@@ -77,11 +74,11 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
             <label className="flex items-center gap-2 text-[12px]">
               <input
                 type="checkbox"
-                checked={nodeData.italic || false}
+                checked={nodeData.data.italic || false}
                 disabled={!isEditMode}
                 onChange={(e) =>
                   onUpdateNode(nodeId, {
-                    ...nodeData,
+                    ...nodeData.data,
                     italic: e.target.checked,
                   })
                 }
@@ -94,7 +91,7 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
       )}
 
       {/* Shape Properties (Rectangle/Circle) */}
-      {nodeData.fill !== undefined && (
+      {nodeData.data.fill !== undefined && (
         <>
           <div>
             <label className="block text-[12px] font-medium mb-1">
@@ -102,11 +99,11 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
             </label>
             <input
               type="color"
-              value={nodeData.fill}
+              value={nodeData.data.fill}
               disabled={!isEditMode}
               onChange={(e) =>
                 onUpdateNode(nodeId, {
-                  ...nodeData,
+                  ...nodeData.data,
                   fill: e.target.value,
                 })
               }
@@ -123,11 +120,11 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
             </label>
             <input
               type="color"
-              value={nodeData.stroke}
+              value={nodeData.data.stroke}
               disabled={!isEditMode}
               onChange={(e) =>
                 onUpdateNode(nodeId, {
-                  ...nodeData,
+                  ...nodeData.data,
                   stroke: e.target.value,
                 })
               }
@@ -142,17 +139,17 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
       )}
 
       {/* Rectangle specific */}
-      {nodeData.width !== undefined && nodeData.height !== undefined && (
+      {nodeData.data.width !== undefined && nodeData.data.height !== undefined && (
         <>
           <div>
             <label className="block text-[12px] font-medium mb-1">Width</label>
             <input
               type="number"
-              value={nodeData.width}
+              value={nodeData.data.width}
               disabled={!isEditMode}
               onChange={(e) =>
                 onUpdateNode(nodeId, {
-                  ...nodeData,
+                  ...nodeData.data,
                   width: parseInt(e.target.value),
                 })
               }
@@ -169,11 +166,11 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
             </label>
             <input
               type="number"
-              value={nodeData.height}
+              value={nodeData.data.height}
               disabled={!isEditMode}
               onChange={(e) =>
                 onUpdateNode(nodeId, {
-                  ...nodeData,
+                  ...nodeData.data,
                   height: parseInt(e.target.value),
                 })
               }
@@ -188,16 +185,16 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
       )}
 
       {/* Circle specific */}
-      {nodeData.radius !== undefined && (
+      {nodeData.data.radius !== undefined && (
         <div>
           <label className="block text-[12px] font-medium mb-1">Radius</label>
           <input
             type="number"
-            value={nodeData.radius}
+            value={nodeData.data.radius}
             disabled={!isEditMode}
             onChange={(e) =>
               onUpdateNode(nodeId, {
-                ...nodeData,
+                ...nodeData.data,
                 radius: parseInt(e.target.value),
               })
             }
@@ -211,4 +208,7 @@ export const ShapeProperties: React.FC<ShapePropertiesProps> = ({
       )}
     </>
   );
-};
+  }
+);
+
+ShapeProperties.displayName = "ShapeProperties";

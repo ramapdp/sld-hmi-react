@@ -4,8 +4,11 @@ import ManualSet1 from "~/assets/icons/manual-set/Frame 478.svg";
 import ManualSet2 from "~/assets/icons/manual-set/Frame 486.svg";
 
 export const ManualSet1Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -13,10 +16,8 @@ export const ManualSet1Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
@@ -55,8 +56,11 @@ export const ManualSet1Node = memo(({ data, selected, id }) => {
 });
 
 export const ManualSet2Node = memo(({ data, selected, id }) => {
-  const { setNodes } = useReactFlow();
-  const size = data.size || { width: 60, height: 60 };
+  const { setNodes, getNode } = useReactFlow();
+  const node = getNode(id);
+  const size = node?.width && node?.height 
+    ? { width: node.width, height: node.height }
+    : { width: 60, height: 60 };
 
   const handleResize = (e: any, params: any) => {
     setNodes((nds) =>
@@ -64,10 +68,8 @@ export const ManualSet2Node = memo(({ data, selected, id }) => {
         node.id === id
           ? {
               ...node,
-              data: {
-                ...node.data,
-                size: { width: params.width, height: params.height },
-              },
+              width: params.width,
+              height: params.height,
             }
           : node
       )
